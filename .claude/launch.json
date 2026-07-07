@@ -1,0 +1,15 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "dev",
+      "runtimeExecutable": "/Users/eugenemuthui/.nvm/versions/node/v20.19.4/bin/node",
+      "runtimeArgs": [
+        "/Users/eugenemuthui/.nvm/versions/node/v20.19.4/lib/node_modules/npm/bin/npm-cli.js",
+        "run",
+        "dev"
+      ],
+      "port": 3000
+    }
+  ]
+}
