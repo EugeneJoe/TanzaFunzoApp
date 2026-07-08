@@ -2,16 +2,18 @@
 
 | | |
 |---|---|
-| **Version** | 0.3 |
-| **Date** | 7 July 2026 |
+| **Version** | 0.5 |
+| **Date** | 8 July 2026 |
 | **Companions** | SRS-tanza-fellowship-hub-beta.md · data-model.md · implementation-plan.md (execution detail + acceptance criteria) |
 
 UI note: the five demo-path screens (block builder, assessment editor, fellow class page, fellow dashboard, admin cohort dashboard) were mocked and agreed on 7 Jul; their layouts and states are specified in implementation-plan.md §7 — no in-build design exploration needed.
 
 **Operating principle:** the demo path is sacred. Every hour advances the single end-to-end story below; anything off that path is a stretch goal and gets cut first, without apology. The brief explicitly rewards depth over breadth.
 
+**Update 8 Jul:** cohort 1 connectivity confirmed strong and stable — the beta prioritises **UX quality**. Low-bandwidth patterns (SSR-first, lazy media) stay as free architecture defaults, but payload budgets are non-blocking targets and the PWA drops down the stretch order. Freed time goes to a polish pass (empty states, pending states, transitions) in the hardening box.
+
 **The demo path (what the Loom will show):**
-Admin signs in → creates a class inside a module → composes the page from blocks → **previews it as a fellow → publishes** → releases it to the cohort → fellow signs up (auto-assigned to cohort) → opens the class, watches video, reads notes → completes the assessment (MC auto-scored, short answer queued) → **AI drafts the short-answer grade → admin edits and approves → releases** → fellow sees feedback → **both dashboards update** → admin re-weights an aptitude → **scores recompute live**. That final beat is the thesis of the whole platform — configuration-driven, performance-not-activity — in one interaction.
+Admin signs in → creates a class inside a module → composes the page from blocks → **previews it as a fellow → publishes** → releases it to the cohort → fellow signs up (auto-assigned to cohort) → opens the class, watches video, reads notes → **posts a question on the class, admin replies with a Tanza badge** → completes the assessment (MC auto-scored, short answer queued) → **AI drafts the short-answer grade → admin edits and approves → releases** → fellow sees feedback → **both dashboards update** → admin re-weights an aptitude → **scores recompute live**. That final beat is the thesis of the whole platform — configuration-driven, performance-not-activity — in one interaction.
 
 ---
 
@@ -44,14 +46,16 @@ Day-one simplifications vs. SRS (each documented in the write-up as a conscious 
 4. Fellow: journey view with locked/released states; class page renderer (text-first, lazy media); assessment taking — MC auto-scored, short answer submitted (idempotency key on submissions).
 5. Grading: admin queue; AI draft (score + feedback against rubric) → admin edits → approve → release; grades project into signals.
 6. Performance: signals → aptitude_scores recompute; weights editor (per question, the polymorphic table + single UI from data-model D1); fellow dashboard (aptitude scores, trend by module, signal counts); admin cohort dashboard (distribution per aptitude, flags with minimum-signal guard).
+7. Class Q&A (SRS §3.9): questions + flat replies section under every released class page; cohort-scoped visibility; admin reply badge; admin soft-hide. Plain text, no notifications, no scoring impact. If the day runs long, moderation (hide) drops to Tier 2 — posting/replying stays.
 
 **Tier 2 — stretch (in pick-up order, only if Tier 1 is demoable):**
 1. Observation entry form (leadership scores a fellow on competencies) — cheapest way to show a *second* signal source flowing into the same pipeline.
 2. Import-from-document assist (FR-2.11) — paste the Government Engagement outline, one AI call proposes classes + draft blocks, admin reviews in the builder before anything is saved. Strong AI-leverage beat for the Loom.
-3. PWA app shell (next-pwa) — NFR-6 with ~30 min of work.
-4. Case-study block + submission + grading (reuses the short-answer grading UI).
-5. Question bank UI with tags (day one: questions created inline on the assessment).
-6. Cloudflare Stream upload + signed playback.
+3. Case-study block + submission + grading (reuses the short-answer grading UI).
+4. Drag-and-drop reordering in the builder and assessment editor (up/down buttons remain as fallback) + builder micro-interactions.
+5. PWA app shell (next-pwa) — NFR-6, demoted 8 Jul with the connectivity update.
+6. Question bank UI with tags (day one: questions created inline on the assessment).
+7. Cloudflare Stream upload + signed playback.
 
 **Deliberately not building (say so in the Loom, confidently):** peer review UI, notifications/emails (signup works without verification day one), password reset, transcripts/summaries, offline reading, content version restore UI, CSV export, audit-log viewer. All are modelled in the schema; none are on the demo path.
 
@@ -64,9 +68,9 @@ Rule: when a box expires, ship what works and move on. The cut line moves up, ne
 | 0:00–0:45 | Scaffold | Next.js + shadcn + Drizzle + Neon wired; **deployed to Vercel**; auth lib installed | — |
 | 0:45–2:00 | Foundation | Full schema migrated; seed script skeleton; signup/login; cohort auto-assign; RBAC middleware; admin bootstrap | Admin override UI (seed it instead) |
 | 2:00–4:00 | Curriculum + builder | Module/class CRUD; block builder with 4 types; draft/preview/publish; release toggle | Reorder-by-drag (use up/down buttons); video block (rich text carries the demo) |
-| 4:00–5:30 | Fellow experience | Journey view; class renderer; assessment take + submit; MC auto-score | Attempt policy (single attempt hardcoded via settings default) |
+| 4:00–5:30 | Fellow experience | Journey view; class renderer; assessment take + submit; MC auto-score; class Q&A (post + reply + admin badge) | Attempt policy (single attempt hardcoded via settings default); Q&A moderation |
 | 5:30–7:00 | Grading + performance | Grading queue; AI draft + approve/release; signal projection; recompute; weights editor; both dashboards | AI draft (fall back to manual grading — the queue still demos); trend chart (show current scores only) |
-| 7:00–7:45 | Seed + harden | Government Engagement module seeded with realistic content; 3–4 seeded fellows with history so dashboards look alive; full demo-path walkthrough on **production**; fix only demo-path bugs | Second seeded module |
+| 7:00–7:45 | Seed + harden | Government Engagement module seeded with realistic content; 3–4 seeded fellows with history so dashboards look alive; **UX polish pass** (empty states, pending states on mutations, no layout shift); full demo-path walkthrough on **production**; fix only demo-path bugs | Second seeded module |
 | 7:45–9:00 | Deliverables | Loom (≤5 min, non-technical, follows the demo path); write-up (prioritization, architecture + 3 flexibility examples — lift from data-model.md §5–7, limitations); clarifying questions (lift SRS Appendix A); README | — |
 
 Deployment happens in the *first* box and continuously after — a hosting surprise at hour 8 is the one unrecoverable failure mode.

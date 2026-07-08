@@ -7,12 +7,9 @@ import { cohorts, enrollments, roles, userRoles, users } from "@/db/schema";
 import { getSession } from "@/lib/session";
 import { hashPassword } from "@/lib/password";
 import { signupSchema } from "@/lib/validation/auth";
+import { isUniqueViolation } from "@/lib/db-errors";
 
 export type SignupState = { error?: string };
-
-// Postgres error code for a unique_violation (belt-and-braces alongside the
-// pre-check below, in case two signups for the same email race each other).
-const UNIQUE_VIOLATION = "23505";
 
 export async function signupAction(_prevState: SignupState, formData: FormData): Promise<SignupState> {
   const parsed = signupSchema.safeParse({
@@ -56,7 +53,7 @@ export async function signupAction(_prevState: SignupState, formData: FormData):
       return user.id;
     });
   } catch (err: unknown) {
-    if (err && typeof err === "object" && "code" in err && err.code === UNIQUE_VIOLATION) {
+    if (isUniqueViolation(err)) {
       return { error: "An account with that email already exists." };
     }
     throw err;

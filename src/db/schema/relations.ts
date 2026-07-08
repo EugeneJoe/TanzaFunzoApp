@@ -1,6 +1,6 @@
 import { relations } from "drizzle-orm";
 import { cohorts, enrollments, roles, userRoles, users } from "./identity";
-import { blocks, classes, modules, pages, pageVersions } from "./curriculum";
+import { blocks, classQuestionReplies, classQuestions, classes, modules, pages, pageVersions } from "./curriculum";
 import { assessmentQuestions, assessments, questionTags, questions, terms } from "./assessments";
 
 // Drizzle relational-query helpers (db.query.x.findMany({ with: {...} })).
@@ -66,6 +66,18 @@ export const pageVersionsRelations = relations(pageVersions, ({ one, many }) => 
 
 export const blocksRelations = relations(blocks, ({ one }) => ({
   pageVersion: one(pageVersions, { fields: [blocks.pageVersionId], references: [pageVersions.id] }),
+}));
+
+export const classQuestionsRelations = relations(classQuestions, ({ one, many }) => ({
+  class: one(classes, { fields: [classQuestions.classId], references: [classes.id] }),
+  cohort: one(cohorts, { fields: [classQuestions.cohortId], references: [cohorts.id] }),
+  author: one(users, { fields: [classQuestions.authorId], references: [users.id] }),
+  replies: many(classQuestionReplies),
+}));
+
+export const classQuestionRepliesRelations = relations(classQuestionReplies, ({ one }) => ({
+  question: one(classQuestions, { fields: [classQuestionReplies.questionId], references: [classQuestions.id] }),
+  author: one(users, { fields: [classQuestionReplies.authorId], references: [users.id] }),
 }));
 
 export const assessmentsRelations = relations(assessments, ({ many }) => ({

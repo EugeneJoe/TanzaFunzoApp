@@ -3,8 +3,8 @@
 
 | | |
 |---|---|
-| **Version** | 0.3 (draft) |
-| **Date** | 7 July 2026 |
+| **Version** | 0.5 (draft) |
+| **Date** | 8 July 2026 |
 | **Author** | Eugene Muthui |
 | **Status** | For review |
 
@@ -19,7 +19,7 @@ This document specifies the functional and non-functional requirements for the b
 The beta serves the **first Fellowship cohort (launching September)** and covers Phase 1 only. It supports two user roles — **Fellows** and **Administrators (Tanza Leadership)** — and delivers:
 
 - configuration-driven curriculum management (modules → classes → block-based pages),
-- the fellow learning experience (video, notes, resources, assessments, case studies, feedback),
+- the fellow learning experience (video, notes, resources, assessments, case studies, feedback, per-class Q&A),
 - performance tracking across three aptitude dimensions with admin-configurable weightings,
 - admin review, grading (AI-assisted), and cohort analytics,
 - low-bandwidth-first delivery as a Progressive Web App.
@@ -31,7 +31,7 @@ Derived from the Tanza brief and stakeholder decisions:
 
 1. **Configuration over code.** Curriculum, competencies, scoring weights, and learning journeys are data, editable by admins — never hard-coded. This is the first Fellowship ever run; everything will change.
 2. **Measure performance, not activity.** Progress bars exist, but the primary lens is: *is this fellow becoming a stronger implementation leader?*
-3. **Low bandwidth is a first-class constraint.** Fellows may be on 2G/3G in areas with poor connectivity. Payload budgets are requirements, not aspirations.
+3. **Great UX now; low-bandwidth readiness preserved.** Cohort 1 will have strong, stable connectivity (confirmed 8 Jul 2026), so the beta optimises for experience quality. Because future cohorts may work from field locations with shaky connections, the low-bandwidth architecture (server-first rendering, lazy media, payload discipline) is retained as design defaults and tracked targets — not beta acceptance gates.
 4. **Flexibility within a solid foundation.** A small, stable core (identity, content blocks, signals, scoring) with variation expressed as configuration.
 5. **Human-in-the-loop AI.** AI accelerates admin work (grading drafts, transcripts) but a human approves anything a fellow sees.
 
@@ -63,18 +63,18 @@ A new, standalone web application (PWA). Long-term it becomes one part of an int
 ### 2.2 User classes
 | Class | Description | Technical proficiency |
 |---|---|---|
-| **Fellow** | ~20–50 per cohort. Accesses learning content, completes assessments and case studies, requests peer reviews, tracks own development. Primarily **laptops** on variable, often poor connectivity; occasional mobile access. | Moderate |
+| **Fellow** | ~20–50 per cohort. Accesses learning content, completes assessments and case studies, requests peer reviews, tracks own development. Primarily **laptops** on strong, stable connections (confirmed for cohort 1); future cohorts may be field-based on 2G/3G. | Moderate |
 | **Admin (Tanza Leadership)** | Small team (<10). Authors curriculum, releases classes, grades submissions, records observations, configures competencies and scoring, monitors the cohort. Typically desktop on good connectivity. | Moderate–high |
 
 Role model must be extensible (e.g., future roles: Mentor, Guest Reviewer, Franchise Manager) — **RBAC with roles as data**, not two hard-coded user types.
 
 ### 2.3 Operating environment
-- **Client:** evergreen desktop browsers as the primary target; installable PWA. Must remain usable over 2G/3G connections and degrade gracefully on mobile browsers (secondary).
+- **Client:** evergreen desktop browsers as the primary target, optimised for reliable broadband (cohort 1). Low-bandwidth degradation paths (2G/3G) and PWA behaviour are retained as targets for field-based future cohorts; mobile browsers secondary.
 - **Server:** cloud-hosted, managed services preferred (see §6). Single region for beta, chosen for proximity/latency to Tanzania.
 
 ### 2.4 Assumptions and dependencies
 - Fellowship content and the platform UI are English-only; fellows are working-proficient in English.
-- Fellows primarily access the platform on laptops; connectivity, not device capability, is the binding constraint.
+- Fellows primarily access the platform on laptops with strong, stable connectivity (confirmed for cohort 1, 8 Jul 2026). Low-bandwidth support is future-proofing for field-based cohorts, not a beta gate.
 - Fellows are adults; no child-safeguarding requirements apply to platform users.
 - A managed video streaming provider (e.g., Cloudflare Stream or Bunny Stream) and an LLM/ASR API (e.g., Anthropic + a speech-to-text service) are available and budgeted (est. combined **$25–60/month** at beta scale).
 - Email delivery service available for sign-up verification and notifications.
@@ -176,6 +176,17 @@ Priorities use MoSCoW: **M**ust, **S**hould, **C**ould, **W**on't (this release)
 
 ---
 
+### 3.9 Class Q&A
+
+| ID | Requirement | Priority |
+|---|---|---|
+| FR-9.1 | Every released class has a Q&A section where fellows can post questions about that class's content. | M |
+| FR-9.2 | Questions and replies are visible to all fellows **in the same cohort** and to all admins. Access inherits the class's release state. | M |
+| FR-9.3 | Any fellow in the cohort or any admin can reply (flat, single-level replies). Admin replies carry a visible Tanza badge. | M |
+| FR-9.4 | Q&A threads attach to the **class**, not the page version — publishing new page content never affects existing threads. | M |
+| FR-9.5 | Admins can hide (soft-moderate) any question or reply; authors can delete their own. | S |
+| FR-9.6 | Q&A activity does **not** contribute to aptitude scores in the beta (participation counting is an activity metric, not a performance measure). Exceptional peer support is captured via admin observations (FR-6.x); a `qna_answer` signal source may be added later. | — |
+
 ## 4. Data & Configuration Model (conceptual)
 
 The schema is relational and deliberately small; flexibility lives in a few well-chosen patterns rather than schemaless sprawl.
@@ -206,7 +217,10 @@ The schema is relational and deliberately small; flexibility lives in a few well
 
 ## 5. Non-Functional Requirements
 
-### 5.1 Performance & low-bandwidth budgets
+### 5.1 Performance & payload targets
+
+Cohort 1 has reliable connectivity, so the budgets below are **tracked engineering targets** that keep the platform field-ready for later cohorts — not beta acceptance gates. Beta acceptance prioritises interaction quality (NFR-18, NFR-21).
+
 | ID | Requirement |
 |---|---|
 | NFR-1 | Initial critical-path payload ≤ **300 KB** compressed JS/CSS; first contentful paint ≤ 3 s and interactive ≤ 5 s on a simulated Fast-3G connection (laptop-class device). |
@@ -218,8 +232,8 @@ The schema is relational and deliberately small; flexibility lives in a few well
 ### 5.2 PWA & resilience on poor connections
 | ID | Requirement |
 |---|---|
-| NFR-6 | **(Must)** Installable PWA with service-worker caching of the app shell (JS/CSS/fonts/icons); repeat visits render from cache; transient connection loss shows a graceful offline state, never a blank page. |
-| NFR-7 | **(Should)** Previously visited class notes, transcripts, and downloaded resources are readable offline; cached content is invalidated when a new page version is published. |
+| NFR-6 | **(Should)** Installable PWA with service-worker caching of the app shell (JS/CSS/fonts/icons); repeat visits render from cache; transient connection loss shows a graceful offline state, never a blank page. *(Downgraded from Must on 8 Jul 2026 — cohort 1 connectivity is strong; promote back before any field-based cohort.)* |
+| NFR-7 | **(Could)** Previously visited class notes, transcripts, and downloaded resources are readable offline; cached content is invalidated when a new page version is published. |
 | NFR-8 | Offline *writes* (assessments, submissions) are **out of scope for beta**, but submission APIs are idempotent with client-generated submission IDs so offline-first sync can be added without API redesign. |
 
 ### 5.3 Availability, scalability, and operations
@@ -289,7 +303,7 @@ Key decisions embodied above:
 - Offline writes / full offline-first sync (NFR-8 keeps the door open).
 - Localisation / Swahili UI (fully out of scope — no i18n scaffolding in the beta).
 - Mobile-optimised fellow experience (responsive fallback only; laptops are the primary access mode).
-- In-app messaging/chat, discussion forums.
+- In-app messaging/chat; general discussion forums beyond the per-class Q&A (§3.9); Q&A notifications and rich-text posts.
 - Recruitment, operations, finance modules from the long-term vision.
 - Automated class-recording generation from slides + voice-over (brief's "ultimately" feature); beta accepts uploaded/linked recordings.
 - Native mobile apps (PWA covers install-to-homescreen).
@@ -300,7 +314,7 @@ Key decisions embodied above:
 
 1. **Self-signup without approval** assumes the sign-up link is distributed only to accepted fellows. *Risk:* strangers joining a cohort. *Mitigation:* unguessable cohort enrolment link and/or a shared enrolment code; admin can deactivate accounts (FR-1.7).
 2. **AI grading quality** assumes rubric-guided drafts are accurate enough to save admin time. *Mitigation:* human approval is mandatory; measure edit-distance between draft and approved feedback during the first module and drop the feature if it costs more than it saves.
-3. **Access profile** assumes fellows use laptops with at least intermittent 2G/3G connectivity. If a significant share turn out to be mobile-only, the responsive fallback needs promotion to a first-class mobile experience; if fellows are offline for days at a time, tier-2 offline reading gets promoted to Must.
+3. **Access profile** assumes cohort 1 fellows use laptops on strong, stable connections (per Tanza, 8 Jul 2026). If that proves wrong in practice — or a field-based cohort arrives sooner than expected — the payload targets and PWA requirements (NFR-1–7) get promoted back to acceptance gates; the architecture already supports them.
 4. **Scoring model simplicity** assumes weighted aggregation of signals is a credible v1 of "measuring performance." Normalisation across graders/activities (e.g., z-scoring) is likely needed once real data arrives — the immutable-signals design allows re-deriving under a new formula.
 5. **Single cohort at a time** during beta; multi-cohort concurrency is modelled (enrollments, releases per cohort) but not UX-optimised.
 
@@ -317,7 +331,7 @@ Key decisions embodied above:
 3. **Should fellows see cohort-relative standing (distribution comparison) or is that culturally/psychologically undesirable for this program?**
    *Why:* the brief asks for comparison "with the wider cohort," but ranked visibility can distort behaviour. *Assumption:* anonymised distribution, no named leaderboard.
 4. **What is the realistic connectivity profile of the first cohort (devices, data plans, home vs. training-centre access)?**
-   *Why:* determines whether offline reading (tier 2) must be hardened before launch, and validates the laptop-primary assumption. *Assumption:* laptops on intermittent 3G/4G.
+   *Answered 8 Jul 2026:* strong and stable for cohort 1 — low-bandwidth work deprioritised to tracked targets; UX quality prioritised. Revisit before any field-based cohort.
 5. **Are class recordings produced per cohort or reused across cohorts?**
    *Why:* affects whether media attaches to the class (shared) or to the class-cohort release. *Assumption:* shared per class, overridable per cohort later.
 6. **Does classroom-discussion feedback need to be released to fellows immediately, or batched/curated per module?**

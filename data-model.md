@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Version** | 0.4 (firmed — decisions resolved in §7) |
+| **Version** | 0.5 (firmed — decisions resolved in §7) |
 | **Date** | 7 July 2026 |
 | **Companion to** | SRS-tanza-fellowship-hub-beta.md (§4) |
 
@@ -151,6 +151,38 @@ Adding "Class 1 — Stakeholder mapping in district government" from the Governm
 4. Rich text is stored as **editor-document JSON (ProseMirror/TipTap), not HTML**: sanitised by construction, server-renderable to minimal HTML (low-payload budget, NFR-1/-3), and stack-portable (NFR-23 applies to content too).
 5. **Preview and publish are pointer operations.** Preview renders the draft version through the exact fellow renderer. Publish stamps `published_at`, atomically points `pages.published_version_id` at v1, and clones blocks into a new draft v2. Rollback = repointing to a retained older version.
 6. A fellow's request loads only the published version's blocks in order and server-renders them text-first — video renders as poster + play button, files as CDN links, the assessment as a launcher. Structured blocks are what make per-type lazy loading possible.
+
+### 2.2 Class Q&A
+
+Q&A threads attach to `classes` — deliberately **not** to `page_versions` (threads must survive content publishes) and not to a block type (every class gets one; it isn't authored). Questions are cohort-scoped: visible to fellows in the same cohort and to all admins. Replies are flat (one level). Q&A produces **no signals** in beta (FR-9.6) — participation counting is an activity metric; exceptional peer support goes through observations instead.
+
+```mermaid
+erDiagram
+  classes ||--o{ class_questions : "asked on"
+  cohorts ||--o{ class_questions : "scoped to"
+  users ||--o{ class_questions : asks
+  class_questions ||--o{ class_question_replies : has
+  users ||--o{ class_question_replies : writes
+  class_questions {
+    uuid id PK
+    uuid class_id FK
+    uuid cohort_id FK
+    uuid author_id FK
+    text body
+    string status "visible | hidden"
+    timestamp created_at
+  }
+  class_question_replies {
+    uuid id PK
+    uuid question_id FK
+    uuid author_id FK
+    text body
+    string status "visible | hidden"
+    timestamp created_at
+  }
+```
+
+Moderation is soft: admins set `status = hidden` (invisible to fellows, flagged for admins); authors may delete their own posts. A future `qna_answer` signal source slots into the §5 pipeline without schema changes.
 
 ## 3. Assessments, case studies & grading
 

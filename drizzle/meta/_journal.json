@@ -15,6 +15,20 @@
       "when": 1783504385460,
       "tag": "0001_useful_red_hulk",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1783515565760,
+      "tag": "0002_add_class_qna",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1783516939556,
+      "tag": "0003_qna_cascade_delete",
+      "breakpoints": true
     }
   ]
 }

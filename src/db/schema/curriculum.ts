@@ -124,3 +124,33 @@ export const fileAssets = pgTable("file_assets", {
   sizeBytes: integer("size_bytes").notNull(),
   ...timestamps(),
 });
+
+// --- 2.2 Class Q&A (data-model.md §2.2) ---
+//
+// Threads attach to `classes`, not `page_versions` — publishing new content
+// must never affect existing threads (locked decision #11). `cohortId` is
+// stamped at post time so visibility stays scoped to the asking fellow's
+// cohort even if their enrollment changes later. Replies are flat (one
+// level, no parent-reply FK). Moderation is soft (`status`), never a delete,
+// so admins can still audit hidden content; authors may hard-delete only
+// their own row. No signals table references these — Q&A never feeds
+// aptitude scoring in the beta (FR-9.6).
+
+export const classQuestions = pgTable("class_questions", {
+  id: uuidPk(),
+  classId: uuid("class_id").notNull().references(() => classes.id),
+  cohortId: uuid("cohort_id").notNull().references(() => cohorts.id),
+  authorId: uuid("author_id").notNull().references(() => users.id),
+  body: text("body").notNull(),
+  status: text("status").notNull().default("visible"), // visible | hidden
+  ...timestamps(),
+});
+
+export const classQuestionReplies = pgTable("class_question_replies", {
+  id: uuidPk(),
+  questionId: uuid("question_id").notNull().references(() => classQuestions.id, { onDelete: "cascade" }),
+  authorId: uuid("author_id").notNull().references(() => users.id),
+  body: text("body").notNull(),
+  status: text("status").notNull().default("visible"), // visible | hidden
+  ...timestamps(),
+});
