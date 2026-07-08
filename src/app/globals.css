@@ -128,3 +128,28 @@
     @apply font-sans;
   }
 }
+
+/* Shared between the TipTap editor (builder) and the read-only block
+   renderer (preview + fellow view) so authored content looks the same in
+   both places without pulling in the Tailwind Typography plugin. */
+.richtext-content h2 {
+  @apply mt-4 mb-2 text-xl font-semibold first:mt-0;
+}
+.richtext-content h3 {
+  @apply mt-3 mb-2 text-lg font-semibold first:mt-0;
+}
+.richtext-content p {
+  @apply mb-3 leading-relaxed last:mb-0;
+}
+.richtext-content ul {
+  @apply mb-3 list-disc pl-6;
+}
+.richtext-content ol {
+  @apply mb-3 list-decimal pl-6;
+}
+.richtext-content blockquote {
+  @apply border-l-2 pl-4 italic text-muted-foreground;
+}
+.richtext-content code {
+  @apply rounded bg-muted px-1 py-0.5 text-sm;
+}

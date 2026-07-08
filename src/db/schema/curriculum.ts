@@ -61,7 +61,9 @@ export const pageVersions = pgTable("page_versions", {
  * loose until something builds them.
  */
 export type BlockConfigMap = {
-  video: { mediaAssetId: string; caption?: string };
+  // mediaAssetId is null until the admin enters a URL — a freshly-added
+  // video block has nothing to reference yet.
+  video: { mediaAssetId: string | null; caption?: string };
   rich_text: { doc: unknown }; // ProseMirror/TipTap document JSON
   resource_list: {
     items: Array<
@@ -104,6 +106,11 @@ export const mediaAssets = pgTable("media_assets", {
   providerRef: text("provider_ref").notNull(),
   status: text("status").notNull().default("ready"), // uploading | processing | ready
   durationS: integer("duration_s"),
+  // Resolved once when the video URL is saved (YouTube: constructed
+  // directly from providerRef; Vimeo: fetched via their oEmbed API), not
+  // re-derived on every render — cheap for YouTube but Vimeo's is a real
+  // network call, so it's cached here rather than repeated per page view.
+  thumbnailUrl: text("thumbnail_url"),
   transcript: text("transcript"),
   aiSummary: text("ai_summary"),
   ...timestamps(),
