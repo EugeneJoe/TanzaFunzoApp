@@ -59,15 +59,30 @@ export default async function MePage() {
     orderBy: (t, { asc }) => [asc(t.name)],
   });
 
-  const [snapshot, journey] = await Promise.all([
+  const [snapshot, journey, mySubmissions, classMap] = await Promise.all([
     computeFellowAptitudeSnapshot(session.userId),
     enrollment ? getFellowJourney(enrollment.cohortId) : Promise.resolve([]),
+    db.query.submissions.findMany({
+      where: and(eq(submissions.userId, session.userId), eq(submissions.subjectType, "assessment")),
+      orderBy: desc(submissions.submittedAt),
+    }),
+    getAssessmentClassMap(),
   ]);
 
   const moduleOrder = [...new Map(journey.map((e) => [e.module.id, e.module])).values()].sort(
     (a, b) => a.position - b.position
   );
-  const currentModuleTitle = [...journey].reverse().find(isReleased)?.module.title ?? moduleOrder[0]?.title;
+  // "Current module" is anchored to the fellow's own most recent submission
+  // rather than "whichever module released a class most recently across the
+  // whole cohort" — a cohort can contain modules the fellow never touches
+  // (sandbox/test content released after their real curriculum), which would
+  // otherwise win this by release timestamp alone. Falls back to the old
+  // released-journey heuristic only before a fellow's first submission.
+  const latestSubmissionLocation = mySubmissions[0] ? classMap.get(mySubmissions[0].subjectId) : undefined;
+  const currentModuleTitle =
+    latestSubmissionLocation?.moduleTitle ??
+    [...journey].reverse().find(isReleased)?.module.title ??
+    moduleOrder[0]?.title;
 
   // aptitude_scores has no cohort_id column (it's per-fellow, not per-enrollment) —
   // scope "the cohort" band by joining through enrollments instead.
@@ -95,11 +110,6 @@ export default async function MePage() {
     }
   }
 
-  const mySubmissions = await db.query.submissions.findMany({
-    where: and(eq(submissions.userId, session.userId), eq(submissions.subjectType, "assessment")),
-    orderBy: desc(submissions.submittedAt),
-  });
-  const classMap = await getAssessmentClassMap();
   const rows = await Promise.all(
     mySubmissions.map(async (sub) => ({
       sub,

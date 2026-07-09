@@ -2,8 +2,8 @@
 
 | | |
 |---|---|
-| **Version** | 0.5 |
-| **Date** | 8 July 2026 |
+| **Version** | 0.6 |
+| **Date** | 9 July 2026 |
 | **Companions** | SRS-tanza-fellowship-hub-beta.md · data-model.md · implementation-plan.md (execution detail + acceptance criteria) |
 
 UI note: the five demo-path screens (block builder, assessment editor, fellow class page, fellow dashboard, admin cohort dashboard) were mocked and agreed on 7 Jul; their layouts and states are specified in implementation-plan.md §7 — no in-build design exploration needed.
@@ -11,6 +11,8 @@ UI note: the five demo-path screens (block builder, assessment editor, fellow cl
 **Operating principle:** the demo path is sacred. Every hour advances the single end-to-end story below; anything off that path is a stretch goal and gets cut first, without apology. The brief explicitly rewards depth over breadth.
 
 **Update 8 Jul:** cohort 1 connectivity confirmed strong and stable — the beta prioritises **UX quality**. Low-bandwidth patterns (SSR-first, lazy media) stay as free architecture defaults, but payload budgets are non-blocking targets and the PWA drops down the stretch order. Freed time goes to a polish pass (empty states, pending states, transitions) in the hardening box.
+
+**Update 9 Jul:** a hifi brand-restyle design handoff landed (`design_handoff_tanza_restyle/` — Tanza Ventures navy/orange palette, Jost/Mulish type, persistent sidebar shells, seven screens: class view, journey, "Your development", results, admin cohort overview, cohorts, grading queue). It is a **visual reskin, not a feature change** — every data element the designs show already exists in the built app. Executed as **Stage 8** (implementation-plan.md §10), after Stage 5 and ahead of all Tier 2 stretch items; it *is* the UX-priority reinvestment the 8 Jul update called for.
 
 **The demo path (what the Loom will show):**
 Admin signs in → creates a class inside a module → composes the page from blocks → **previews it as a fellow → publishes** → releases it to the cohort → fellow signs up (auto-assigned to cohort) → opens the class, watches video, reads notes → **posts a question on the class, admin replies with a Tanza badge** → completes the assessment (MC auto-scored, short answer queued) → **AI drafts the short-answer grade → admin edits and approves → releases** → fellow sees feedback → **both dashboards update** → admin re-weights an aptitude → **scores recompute live**. That final beat is the thesis of the whole platform — configuration-driven, performance-not-activity — in one interaction.

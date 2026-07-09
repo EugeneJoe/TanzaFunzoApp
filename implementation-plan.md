@@ -2,8 +2,8 @@
 
 | | |
 |---|---|
-| **Version** | 1.2 |
-| **Date** | 8 July 2026 |
+| **Version** | 1.3 |
+| **Date** | 9 July 2026 |
 | **Audience** | Implementing agent/developer. This document is self-contained; read §1–§3 before writing any code. |
 | **Companions** | SRS-tanza-fellowship-hub-beta.md (requirements) · data-model.md (schema — source of truth) · build-plan.md (prioritisation rationale) |
 
@@ -72,6 +72,7 @@ admin creates a class in a module → composes the page from blocks → previews
 | 5 | Seed + production hardening | Demo path passes on production with rich data |
 | 6 | Stretch tiers (in order) | Only after Stage 5 passes |
 | 7 | Handover artifacts | README + demo checklist |
+| 8 | Brand restyle (added 9 Jul) | App matches the Tanza brand design handoff — see §10 |
 
 Stages run strictly in order; a stage is complete only when every acceptance criterion (AC) passes and the work is committed and deployed.
 
@@ -173,6 +174,13 @@ Tasks: README (setup, env table, architecture overview linking SRS/data-model, s
 
 ## 7. Screen specifications (agreed mockups — build these, don't redesign)
 
+> **Superseded for visual styling (9 Jul 2026):** the design handoff in
+> `design_handoff_tanza_restyle/` now defines the look (palette, type, sidebar shell,
+> card/badge treatments) for the fellow class page, journey, `/me`, results, and the
+> three admin screens — see §10. The *structural* content of 7.1–7.5 (what each screen
+> contains and does) still stands; where §10 and this section conflict on appearance,
+> §10 wins.
+
 **7.1 Block builder** (`/admin/curriculum/class/[id]`): header = breadcrumb, class title, autosave timestamp, amber "Draft vN" badge, secondary "Preview as fellow", primary "Publish". Main column = block cards in fellow reading order; each card: type icon + label header with up/down/delete; inline editing bodies (video: provider select + URL + caption + thumbnail placeholder; rich text: mini toolbar + editor; resources: rows with filename/size or external link + "Add resource"; assessment: summary [title, question counts, weight chips] + "Edit assessment" button). Bottom: dashed "Add block" row with four type chips. Right rail (~190px): Page card (status, published version + date, release state per cohort) and Versions list (draft = "editing", published versions with "Restore").
 
 **7.2 Assessment editor** (`/admin/assessments/[id]`): header = breadcrumb, title, saved timestamp, "Done — back to class". Summary bar: question count, total points, live weights rollup, attempts select. Question cards (same chassis as builder): header "Qn · type · pts" + up/down/delete/collapse; MC body = prompt input, option rows (radio marks correct, per-option remove, "Add option"); short-answer body = prompt + rubric textarea + helper line "AI drafts a score and feedback against this rubric — you review and approve before the fellow sees it"; both = tag chips (+ add) and "Counts toward" weight inputs (Technical/Strategic/Leadership %) with green 100% check. Bottom: "Add question" row (Multiple choice / Short answer) + muted "From bank — post-beta". Locked state: read-only cards + "Duplicate to edit" banner.
@@ -200,3 +208,76 @@ Peer review UI · notifications/email sending (signup works without verification
 9. As the fellow: `/me` shows score + feedback; dashboard shows aptitude scores with signal counts.
 10. As admin: open the (duplicated) assessment → change Q1 weights (e.g. Technical 100 → 60/Strategic 40) → save → fellow's Technical/Strategic scores shift on both dashboards; `audit_log` has the change.
 11. (Informative, non-blocking) Reload the class page on a throttled "Fast 3G" profile and record the readable-in time in the README limitations section — field-readiness evidence, not a beta gate.
+
+---
+
+## 10. Stage 8 — Brand restyle (design handoff, 9 July 2026)
+
+**Source of truth:** `design_handoff_tanza_restyle/README.md` (tokens, shell, per-screen specs), `screenshots/*.png` (visual reference for all seven screens), `Tanza Fellowship Hub — Combined.dc.html` (inspect exact measurements only — **never copy its markup or inline styles**; it is a streaming prototype with repeated markup).
+
+**What this is:** a visual reskin to the Tanza Ventures brand — navy `#132239` sidebar shells (learner + admin), orange `#DE5A1C` accent, Jost headings / Mulish body — across seven hifi screens: `2A` class view, `2B` journey, `2C` "Your development" (`/me`), `2D` results, `3A` admin cohort overview (`/admin`), `3B` cohorts, `3C` grading queue.
+
+**What this is NOT:** a feature change. Audit finding (9 Jul): every data element the designs show — aptitude scorecards with vs-previous-module deltas, cohort P25–P75 bands, strengths/focus competency tags, module progress, the four admin stat cards, capability-gap bars, roster reassign controls, grading-queue rows — **already exists** in `src/app/(fellow)/me/page.tsx`, `src/app/admin/page.tsx`, `src/app/admin/cohorts/`, and `src/app/admin/grading/`. No schema, action, or query changes are in scope; touch queries only if a screen needs a field it already loads elsewhere.
+
+**Ordering:** runs after Stage 5 (the app is functionally complete); takes priority over all Stage 6 stretch items. Phases run in order; each ends with `tsc --noEmit` clean, a production deploy, and a curl smoke of the demo-path routes (the preview tool cannot launch this app — use `npm run dev` + curl).
+
+### Phase 8.1 — Design foundation (tokens, fonts, shells)
+
+Tasks:
+1. **Fonts:** replace Geist with `Jost` (weights 500/600 — headings, buttons, labels, overlines) and `Mulish` (400/600/700 — body, inputs) via `next/font/google` in `src/app/layout.tsx`; wire `--font-sans` → Mulish and `--font-heading` → Jost in `globals.css` `@theme`. Headings/buttons/badges pick up Jost via a base-layer rule (`h1–h4, button, [data-slot=badge]` etc.), not per-component classes.
+2. **Token remap** in `globals.css` `:root` (light theme only — the app has no theme toggle; leave `.dark` untouched): `--primary` #DE5A1C / `--primary-foreground` white; `--secondary` #152744 (navy buttons) / white; `--background` #F4F6F9; `--card` #FFFFFF; `--foreground` #152744; body text #3A4A66; `--muted-foreground` #6C7A93; `--border` #E4E8EE; `--input` #D6DBE3; `--ring` orange. Add brand tokens under `@theme`: `navy` #132239, `navy-900` #152744, `orange-hover` #B8460F, `orange-tint` #FDEEE4, `card-alt` #EEF1F4, `card-faint` #FBFCFD, `text-faint` #8A97AC, and the success (#1E5A38/#B7DEC4/#EDF7F0/#2E7D53), error (#8A3320/#E7B9B0/#FBEEEB/#C44A2E), and warning (#B26A1B/#FBEFD8) sets, per the handoff token table.
+3. **Component variants:** `Badge` gains `success` / `warning` / `error` / `orange-tint` / solid-navy variants (pill radius 20px); `Button` primary = orange with #B8460F hover, `secondary` = navy, outline uses `--input` border. Add an `Overline` primitive (Jost 11–12px, uppercase, tracking 1.5–2px).
+4. **`<AppSidebar>`** (`src/components/app-sidebar.tsx`, client): navy #132239, 244px fixed, full height, faint triangle SVG watermark (lift the `background-image` data-URI from the reference HTML). Composition: wordmark ("TANZA / FELLOWSHIP", FELLOWSHIP orange; optional "ADMIN" overline), nav items (idle #9FB0C8; active = white on `rgba(222,90,28,.16)` + 3px orange left border + orange bullet), optional module section (overline + numbered-circle class list, current class orange), pinned footer (learner: orange avatar circle + name + "Log out"; admin: "Log out" only). Icons from `lucide-react`.
+5. **Layout rework:** `(fellow)/layout.tsx` and `admin/layout.tsx` become sidebar shells — fixed sidebar + scrollable `#F4F6F9` main. The learner layout fetches the fellow's journey once (`getFellowJourney`) and passes it to the sidebar, which derives active nav + the module/class section from the pathname (module section renders only on class + results routes, per the handoff). Verify layout/params/pathname mechanics against `node_modules/next/dist/docs` before implementing — this Next.js version differs from training data.
+6. **Rich-text CSS:** update `.richtext-content` rules to the handoff prose spec (body 16px/1.7 in `text-body`, list padding-left 22px / line-height 1.9, H2 24px Jost).
+
+**AC-8.1:**
+- [ ] Jost renders on headings/buttons/badges and Mulish on body copy (verify computed `font-family` in the browser, not just the CSS).
+- [ ] Both shells render: learner sidebar with journey nav + user footer; admin sidebar with ADMIN overline + Curriculum/Cohorts/Grading + logout footer; active item styling follows the current route.
+- [ ] Learner sidebar shows the current module's class list on class and results routes only; current class highlighted orange.
+- [ ] Every page still renders (no route broken by the layout rework); `tsc --noEmit` clean.
+
+### Phase 8.2 — Learner screens 2A, 2B, 2D
+
+Restyle in place (no logic changes) to match the screenshots:
+1. **`2A` class view** (`/learn/class/[classId]`): overline row "MODULE · CLASS n OF m" + right-aligned progress rail (130×6px, #E1E6EC track, orange fill, "%" label); H1 + meta line; resource rows white with 3px orange left border + icon chips (link = orange on #FDEEE4, PDF = navy on #EEF1F4) + faint right meta; video poster with circular play + caption; assessment card on `card-alt` #EEF1F4 with outline status pill + orange "Start assessment"; Questions block on `card-faint` #FBFCFD wrapping a white textarea + right-aligned navy "Post question".
+2. **`2B` journey** (`/learn`): H1 "Your journey" + "COHORT n" overline; white module cards; locked rows dimmed with "Not yet scheduled" + outline "Locked" pill on #F7F8FA, non-interactive; in-progress module gets an orange-tint "In progress" pill and its class row a 3px orange left border, numbered orange circle, and orange "Continue" button.
+3. **`2D` results** (`/learn/class/[classId]/assessment` results view): overline breadcrumb; H1 + outline "← Back to class"; summary strip with 3px orange left border ("n/m points so far" Jost 600 + faint awaiting-grading note + submitted timestamp); question cards with orange "Qn" labels; short-answer answer in a #F4F6F9 box + warning "Awaiting grading" pill; MC option rows — neutral / success + green circular check / error + red circular ✕ with right-aligned red "YOUR ANSWER"; muted points footer.
+
+**AC-8.2:**
+- [ ] Each screen matches its screenshot at ≥1280px (sidebar, palette, card treatments, badges, buttons — pixel-close, not pixel-perfect).
+- [ ] Continue → class, Start assessment → assessment, Back to class → class all still route; locked classes remain non-interactive.
+- [ ] Q&A posting, replying, admin badge, and hide/delete behaviour unchanged (restyle only).
+
+### Phase 8.3 — Learner screen 2C ("Your development", `/me`)
+
+All content exists — restyle only: scorecards with faint 13px labels, Jost 600 36px navy numbers, delta rows (↑ success green / ↓ error red "N vs {module}" + faint "· n signals"); "You and the cohort" panel — restyle the existing `CohortBand` to spec (8px #ECEFF3 track, #D3D9E1 band, 16px navy dot with `0 0 0 3px #fff` ring); Strengths as solid navy pills / Focus next as outline pills; full-width 8px orange module progress bar + muted caption; submission rows with solid navy "Graded" pill and points in plain navy (Jost 600 15px) — grading outcome is not colour-coded pass/fail.
+
+**AC-8.3:**
+- [ ] Matches `2C-your-development.png`; the "no comparison yet" scorecard state shows only the signals count (as Technical does in the screenshot).
+- [ ] All values still come from the existing snapshot/band/competency queries — zero data-layer changes in the diff.
+
+### Phase 8.4 — Admin screens 3A, 3B, 3C
+
+1. **`3A` overview** (`/admin`): constrained content column; 4 stat cards (Needs support number in error red, Exceptional in success green, others navy); "Attention" dashed-border empty state per the design — the **populated** flag list is not designed (handoff says ask before building), so keep the existing row content and restyle it minimally to the token set; "Cohort capability gaps" card with 6px tracks, orange fills, error-red fill when the score is at-risk (keep the existing lowest-row rule).
+2. **`3B` cohorts** (`/admin/cohorts`): wide main (no 780px cap, ~1280px frame); one white card per cohort — header (Jost 600 19px name + neutral "active" pill on #EEF1F4) + faint meta line (start date, enrolment window, fellow count); roster as a 4-column grid with tracked-uppercase 11px headers (NAME / EMAIL / ASSIGNED BY / MOVE TO), outline "system" pill, and the existing reassign control styled as outline select + disabled-until-chosen outline "Reassign" (#F7F8FA disabled bg).
+3. **`3C` grading queue** (`/admin/grading`): wide main; H1 + "n responses awaiting grading" subtitle; one table card — columns Fellow (navy 600) / Class (muted) / Question (full text, wraps, most flex space) / Attempt ("Attempt n of m" + stacked outline "Counts toward score" pill when applicable) / Submitted (relative, faint) / Points (Jost 600 navy) / orange "Grade" button.
+
+**AC-8.4:**
+- [ ] Each screen matches its screenshot; admin sidebar active state follows the route.
+- [ ] Reassign stays disabled until a target cohort is chosen; Grade opens the existing grading detail; all existing actions work unchanged.
+
+### Phase 8.5 — Coherence pass + verification
+
+1. Undesigned screens (login/signup, `/admin/curriculum` tree, block builder, assessment editor, grading detail, preview-as-fellow, `/forbidden`) inherit the new tokens/fonts automatically — do a light pass so nothing clashes (stray default-gray surfaces, old accent colours). **No redesign**: §7.1–7.2 structure stands; builder/editor get the admin sidebar shell and brand tokens, nothing more.
+2. Preview-as-fellow must render with the *fellow* class-page styling (it uses the same renderer — confirm the shell/tokens carry over, since preview lives under `/admin`).
+3. Verification: `npm run build` + `tsc --noEmit` clean; demo script §9 steps 1–10 pass end-to-end (restyle must cause zero functional regressions); curl smoke of every route in §2; side-by-side check of each screenshot vs the rendered screen.
+
+**AC-8.5:**
+- [ ] No screen anywhere in the app shows the old neutral/Geist look.
+- [ ] Preview-as-fellow visually matches the fellow class page.
+- [ ] §9 steps 1–10 pass on production after deploy.
+
+### Stage 8 guardrails (additions to §8)
+
+No dark-mode styling work · no mobile-specific redesign (responsive fallback is enough) · never copy the prototype HTML's markup or inline styles — extract shared pieces (sidebar, cards, badges, overline) into components · no new data, schema, or action changes · don't build the populated "Attention" list design (not designed — keep existing content, token-level restyle only) · emoji/unicode glyphs from the prototype become `lucide-react` icons.
