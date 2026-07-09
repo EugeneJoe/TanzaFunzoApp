@@ -41,7 +41,7 @@ export function VideoPlayer({
     <button
       type="button"
       onClick={() => setLoaded(true)}
-      className="group relative flex aspect-video w-full items-center justify-center overflow-hidden rounded-lg bg-muted"
+      className="group relative flex aspect-video w-full items-center justify-center overflow-hidden rounded-lg bg-navy focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
     >
       {thumbnailUrl && (
         <>

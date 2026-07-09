@@ -32,6 +32,7 @@ export function TagPicker({
               type="button"
               disabled={isPending}
               onClick={() => startTransition(() => removeTagAction(assessmentId, questionId, tag.id))}
+              className="rounded-full focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
             >
               <X className="size-3" />
             </button>

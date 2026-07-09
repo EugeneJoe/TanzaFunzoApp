@@ -22,8 +22,16 @@ export async function BlockRenderer({
   classId: string;
   mode: "preview" | "fellow";
 }) {
+  if (blocks.length === 0) {
+    return (
+      <p className="rounded-[10px] border border-dashed border-input p-8 text-center text-sm text-text-faint italic">
+        This class doesn&apos;t have any content yet.
+      </p>
+    );
+  }
+
   return (
-    <div className="mx-auto flex w-full max-w-[560px] flex-col gap-6">
+    <div className="flex w-full flex-col gap-6">
       {blocks.map((block) => (
         <Block key={block.id} block={block} classId={classId} mode={mode} />
       ))}
@@ -52,7 +60,7 @@ async function Block({ block, classId, mode }: { block: RenderableBlock; classId
             durationS={asset.durationS}
             thumbnailUrl={asset.thumbnailUrl}
           />
-          {config.caption && <p className="text-sm text-muted-foreground">{config.caption}</p>}
+          {config.caption && <p className="text-sm text-text-faint italic">{config.caption}</p>}
         </div>
       );
     }

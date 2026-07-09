@@ -4,7 +4,7 @@ import { db } from "@/db";
 import { assessmentQuestions } from "@/db/schema";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardAction, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { getSession } from "@/lib/session";
 import { countSubmissions, getLatestSubmission, getSubmissionResult } from "@/lib/assessment-result";
 
@@ -42,52 +42,33 @@ export async function AssessmentLauncher({
   });
   const minutes = questionLinks.length * MINUTES_PER_QUESTION;
 
+  const status =
+    mode === "fellow" ? await getFellowStatus(assessmentId, assessment.settings.attemptsAllowed) : null;
+
   return (
-    <Card>
+    <Card className="bg-card-alt">
       <CardHeader>
-        <CardTitle>{assessment.title}</CardTitle>
-        <p className="text-sm text-muted-foreground">
+        <CardTitle className="text-lg">{assessment.title}</CardTitle>
+        <CardAction>
+          <Badge variant="outline" className="uppercase tracking-wide">
+            {mode === "preview" ? "Preview" : status!.label}
+          </Badge>
+        </CardAction>
+        <CardDescription>
           {questionLinks.length} question{questionLinks.length === 1 ? "" : "s"} · about {minutes} minutes
-        </p>
+        </CardDescription>
       </CardHeader>
       <CardContent>
         {mode === "preview" ? (
-          <div className="flex items-center gap-2">
-            <Badge variant="outline">Preview</Badge>
-            <Button disabled>Start assessment</Button>
-          </div>
+          <Button disabled>Start assessment</Button>
+        ) : status!.attemptsExhausted ? (
+          <Button disabled>Start assessment</Button>
         ) : (
-          <FellowLauncherBody
-            assessmentId={assessmentId}
-            classId={classId}
-            attemptsAllowed={assessment.settings.attemptsAllowed}
-          />
+          <Button asChild>
+            <Link href={`/learn/class/${classId}/assessment`}>Start assessment</Link>
+          </Button>
         )}
       </CardContent>
     </Card>
-  );
-}
-
-async function FellowLauncherBody({
-  assessmentId,
-  classId,
-  attemptsAllowed,
-}: {
-  assessmentId: string;
-  classId: string;
-  attemptsAllowed: number;
-}) {
-  const { label, attemptsExhausted } = await getFellowStatus(assessmentId, attemptsAllowed);
-  return (
-    <div className="flex items-center gap-3">
-      <Badge variant={label === "Graded" ? "default" : "outline"}>{label}</Badge>
-      {attemptsExhausted ? (
-        <Button disabled>Start assessment</Button>
-      ) : (
-        <Button asChild>
-          <Link href={`/learn/class/${classId}/assessment`}>Start assessment</Link>
-        </Button>
-      )}
-    </div>
   );
 }

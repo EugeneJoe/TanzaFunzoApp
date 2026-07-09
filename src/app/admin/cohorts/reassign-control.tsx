@@ -41,6 +41,7 @@ export function ReassignControl({
         size="sm"
         variant="outline"
         disabled={!cohortId || isPending}
+        className="disabled:bg-row-disabled"
         onClick={() => startTransition(() => reassignFellowAction(userId, cohortId))}
       >
         {isPending ? "Moving…" : "Reassign"}

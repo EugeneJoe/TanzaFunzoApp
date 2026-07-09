@@ -9,6 +9,7 @@ import { getCurrentEnrollment } from "@/lib/enrollment";
 import { isClassReleasedForCohort } from "@/lib/journey";
 import { countSubmissions, getLatestSubmission } from "@/lib/assessment-result";
 import { Button } from "@/components/ui/button";
+import { Overline } from "@/components/ui/overline";
 import { AssessmentForm, type FormQuestion } from "./assessment-form";
 import { AssessmentResults } from "./results";
 
@@ -67,16 +68,18 @@ export default async function AssessmentPage({
   }));
 
   return (
-    <div className="mx-auto flex w-full max-w-[560px] flex-col gap-6 p-6">
-      <div>
-        <p className="text-sm text-muted-foreground">
-          {cls.module.title} · {cls.title}
-        </p>
-        <h1 className="text-xl font-semibold">{assessment.title}</h1>
+    <div className="mx-auto flex w-full max-w-[780px] flex-col gap-6 px-8 py-10 sm:px-12">
+      <div className="flex items-start justify-between gap-4">
+        <div>
+          <Overline>
+            {cls.module.title} · {cls.title}
+          </Overline>
+          <h1 className="mt-1 font-heading text-[28px] font-semibold text-navy-900">{assessment.title}</h1>
+        </div>
+        <Button asChild variant="outline" size="sm" className="shrink-0">
+          <Link href={`/learn/class/${classId}`}>← Back to class</Link>
+        </Button>
       </div>
-      <Button asChild variant="outline" size="sm" className="self-start">
-        <Link href={`/learn/class/${classId}`}>Back to class</Link>
-      </Button>
 
       {showForm ? (
         <AssessmentForm classId={classId} assessmentId={assessmentId} questions={formQuestions} />

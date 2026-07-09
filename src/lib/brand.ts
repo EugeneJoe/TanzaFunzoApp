@@ -1,0 +1,2 @@
+export const TRIANGLE_WATERMARK =
+  "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='90' height='78'%3E%3Cpath d='M0 78 L45 0 L90 78' fill='none' stroke='%23ffffff' stroke-opacity='0.04' stroke-width='1'/%3E%3Cpath d='M-45 78 L0 0 L45 78' fill='none' stroke='%23ffffff' stroke-opacity='0.04' stroke-width='1'/%3E%3Cpath d='M45 78 L90 0 L135 78' fill='none' stroke='%23ffffff' stroke-opacity='0.04' stroke-width='1'/%3E%3C/svg%3E\")";

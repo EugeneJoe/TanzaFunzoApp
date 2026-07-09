@@ -2,9 +2,9 @@ import Link from "next/link";
 import { ArrowDown, ArrowUp, Archive } from "lucide-react";
 import { db } from "@/db";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import { SubmitButton } from "@/components/ui/submit-button";
 import {
   archiveClassAction,
   archiveModuleAction,
@@ -40,11 +40,17 @@ export default async function CurriculumPage() {
         <h1 className="text-2xl font-semibold">Curriculum</h1>
         <form action={createModuleAction} className="flex items-center gap-2">
           <Input name="title" placeholder="New module title" className="w-56" required />
-          <Button type="submit" variant="outline" size="sm">
+          <SubmitButton variant="outline" size="sm" pendingText="Adding…">
             Add module
-          </Button>
+          </SubmitButton>
         </form>
       </div>
+
+      {modulesList.length === 0 && (
+        <p className="rounded-lg border border-dashed p-8 text-center text-sm text-muted-foreground italic">
+          No modules yet — add one above to start building the curriculum.
+        </p>
+      )}
 
       {modulesList.map((mod, modIndex) => {
         const activeClasses = mod.classes.filter((c) => c.status === "active");
@@ -54,23 +60,28 @@ export default async function CurriculumPage() {
               <CardTitle>{mod.title}</CardTitle>
               <div className="flex items-center gap-1">
                 <form action={reorderModuleAction.bind(null, mod.id, "up")}>
-                  <Button type="submit" size="icon" variant="ghost" disabled={modIndex === 0}>
+                  <SubmitButton size="icon" variant="ghost" disabled={modIndex === 0}>
                     <ArrowUp className="size-4" />
-                  </Button>
+                  </SubmitButton>
                 </form>
                 <form action={reorderModuleAction.bind(null, mod.id, "down")}>
-                  <Button type="submit" size="icon" variant="ghost" disabled={modIndex === modulesList.length - 1}>
+                  <SubmitButton size="icon" variant="ghost" disabled={modIndex === modulesList.length - 1}>
                     <ArrowDown className="size-4" />
-                  </Button>
+                  </SubmitButton>
                 </form>
                 <form action={archiveModuleAction.bind(null, mod.id)}>
-                  <Button type="submit" size="icon" variant="ghost">
+                  <SubmitButton size="icon" variant="ghost">
                     <Archive className="size-4" />
-                  </Button>
+                  </SubmitButton>
                 </form>
               </div>
             </CardHeader>
             <CardContent className="flex flex-col gap-3">
+              {activeClasses.length === 0 && (
+                <p className="rounded-lg border border-dashed p-4 text-center text-sm text-muted-foreground italic">
+                  No classes in this module yet.
+                </p>
+              )}
               {activeClasses.map((cls, clsIndex) => (
                 <div key={cls.id} className="flex items-center justify-between rounded-lg border p-3">
                   <Link href={`/admin/curriculum/class/${cls.id}`} className="font-medium hover:underline">
@@ -91,24 +102,23 @@ export default async function CurriculumPage() {
                     })}
                     <div className="flex items-center gap-1">
                       <form action={reorderClassAction.bind(null, cls.id, mod.id, "up")}>
-                        <Button type="submit" size="icon" variant="ghost" disabled={clsIndex === 0}>
+                        <SubmitButton size="icon" variant="ghost" disabled={clsIndex === 0}>
                           <ArrowUp className="size-4" />
-                        </Button>
+                        </SubmitButton>
                       </form>
                       <form action={reorderClassAction.bind(null, cls.id, mod.id, "down")}>
-                        <Button
-                          type="submit"
+                        <SubmitButton
                           size="icon"
                           variant="ghost"
                           disabled={clsIndex === activeClasses.length - 1}
                         >
                           <ArrowDown className="size-4" />
-                        </Button>
+                        </SubmitButton>
                       </form>
                       <form action={archiveClassAction.bind(null, cls.id)}>
-                        <Button type="submit" size="icon" variant="ghost">
+                        <SubmitButton size="icon" variant="ghost">
                           <Archive className="size-4" />
-                        </Button>
+                        </SubmitButton>
                       </form>
                     </div>
                   </div>
@@ -117,9 +127,9 @@ export default async function CurriculumPage() {
               <form action={createClassAction} className="flex items-center gap-2 pt-1">
                 <input type="hidden" name="moduleId" value={mod.id} />
                 <Input name="title" placeholder="New class title" className="max-w-xs" required />
-                <Button type="submit" variant="outline" size="sm">
+                <SubmitButton variant="outline" size="sm" pendingText="Adding…">
                   Add class
-                </Button>
+                </SubmitButton>
               </form>
             </CardContent>
           </Card>

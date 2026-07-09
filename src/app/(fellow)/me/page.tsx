@@ -14,6 +14,8 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
+import { InfoTip } from "@/components/info-tip";
+import { cn } from "@/lib/utils";
 
 function computeTrend(snapshot: AptitudeScoreResult[], termId: string, moduleOrder: { id: string; title: string }[]) {
   const byModule = new Map(snapshot.filter((r) => r.termId === termId).map((r) => [r.periodKey, r.score]));
@@ -37,13 +39,13 @@ function percentile(sorted: number[], p: number): number {
 function CohortBand({ score, p25, p75 }: { score: number; p25: number; p75: number }) {
   const clamp = (n: number) => Math.min(100, Math.max(0, n));
   return (
-    <div className="relative h-2 w-full rounded-full bg-muted">
+    <div className="relative h-2 w-full rounded-full bg-track-faint">
       <div
-        className="absolute top-0 h-full rounded-full bg-muted-foreground/25"
+        className="absolute top-0 h-full rounded-full bg-track-band"
         style={{ left: `${clamp(p25)}%`, width: `${clamp(p75 - p25)}%` }}
       />
       <div
-        className="absolute top-1/2 size-3.5 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-background bg-primary"
+        className="absolute top-1/2 size-4 -translate-x-1/2 -translate-y-1/2 rounded-full bg-navy-900 shadow-[0_0_0_3px_#fff]"
         style={{ left: `${clamp(score)}%` }}
       />
     </div>
@@ -159,11 +161,11 @@ export default async function MePage() {
   const focusNext = competencyAverages.length > 1 ? [...competencyAverages].slice(-topCount).reverse() : [];
 
   return (
-    <div className="mx-auto flex w-full max-w-3xl flex-col gap-8 p-6">
+    <div className="mx-auto flex w-full max-w-[780px] flex-col gap-8 px-8 py-10 sm:px-12">
       <div className="flex flex-col gap-6">
         <div>
-          <h1 className="text-2xl font-semibold">Your development</h1>
-          <p className="text-sm text-muted-foreground">
+          <h1 className="font-heading text-[32px] font-semibold text-navy-900">Your development</h1>
+          <p className="text-sm text-text-faint">
             {[enrollment?.cohort.name, currentModuleTitle].filter(Boolean).join(" · ")}
             {" — "}updated {new Date().toLocaleDateString()}
           </p>
@@ -176,26 +178,35 @@ export default async function MePage() {
             return (
               <Card key={term.id}>
                 <CardHeader className="pb-2">
-                  <CardTitle className="text-sm font-medium text-muted-foreground">{term.name}</CardTitle>
+                  <CardTitle className="flex items-center gap-1.5 text-[13px] font-normal text-text-faint">
+                    {term.name}
+                    <InfoTip>
+                      Your all-time {term.name} score on a 0–100 scale, combining every graded item that
+                      counts toward this aptitude. The arrow compares your latest module with the one
+                      before it, and &ldquo;signals&rdquo; is how many graded items feed the score — more
+                      signals make it more reliable.
+                    </InfoTip>
+                  </CardTitle>
                 </CardHeader>
                 <CardContent>
                   {allTime ? (
                     <>
-                      <p className="text-3xl font-semibold">{Math.round(allTime.score)}</p>
+                      <p className="font-heading text-[36px] font-semibold text-navy-900">
+                        {Math.round(allTime.score)}
+                      </p>
                       <div className="mt-1 flex items-center gap-1.5 text-sm">
                         {trend && trend.delta !== 0 && (
                           <span
-                            className={
-                              trend.delta > 0
-                                ? "flex items-center gap-0.5 text-green-600"
-                                : "flex items-center gap-0.5 text-destructive"
-                            }
+                            className={cn(
+                              "flex items-center gap-0.5 font-medium",
+                              trend.delta > 0 ? "text-success-text" : "text-error-text"
+                            )}
                           >
                             {trend.delta > 0 ? <ArrowUp className="size-3.5" /> : <ArrowDown className="size-3.5" />}
                             {Math.abs(trend.delta)} vs {trend.vsModuleTitle}
                           </span>
                         )}
-                        <span className="text-muted-foreground">· {allTime.signalCount} signals</span>
+                        <span className="text-text-faint">· {allTime.signalCount} signals</span>
                       </div>
                     </>
                   ) : (
@@ -208,38 +219,53 @@ export default async function MePage() {
         </div>
 
         {enrollment && cohortBands.size > 0 && (
-          <div className="flex flex-col gap-3 rounded-lg border p-4">
-            <div>
-              <p className="text-sm font-medium">You and the cohort</p>
-              <p className="text-xs text-muted-foreground">Shaded band = middle half of the cohort · dot = you (all-time)</p>
-            </div>
-            <div className="flex flex-col gap-3">
-              {aptitudeTerms.map((term) => {
-                const band = cohortBands.get(term.id);
-                const myScore = snapshot.find((r) => r.termId === term.id && r.periodKey === ALL_TIME_PERIOD)?.score;
-                if (!band || myScore === undefined) return null;
-                return (
-                  <div key={term.id} className="flex items-center gap-3">
-                    <span className="w-24 shrink-0 text-sm text-muted-foreground">{term.name}</span>
-                    <CohortBand score={myScore} p25={band.p25} p75={band.p75} />
-                  </div>
-                );
-              })}
-            </div>
-          </div>
+          <Card>
+            <CardContent className="flex flex-col gap-4">
+              <div>
+                <p className="flex items-center gap-1.5 font-heading text-sm font-semibold text-navy-900">
+                  You and the cohort
+                  <InfoTip>
+                    Each track runs 0–100. The dot is your all-time score; the shaded band covers the
+                    middle half of your cohort. A dot inside the band means you&rsquo;re tracking with
+                    the group — left of it, room to grow; right of it, you&rsquo;re ahead.
+                  </InfoTip>
+                </p>
+                <p className="text-xs text-text-faint">Shaded band = middle half of the cohort · dot = you (all-time)</p>
+              </div>
+              <div className="flex flex-col gap-4">
+                {aptitudeTerms.map((term) => {
+                  const band = cohortBands.get(term.id);
+                  const myScore = snapshot.find((r) => r.termId === term.id && r.periodKey === ALL_TIME_PERIOD)?.score;
+                  if (!band || myScore === undefined) return null;
+                  return (
+                    <div key={term.id} className="flex items-center gap-3">
+                      <span className="w-24 shrink-0 text-sm text-muted-foreground">{term.name}</span>
+                      <CohortBand score={myScore} p25={band.p25} p75={band.p75} />
+                    </div>
+                  );
+                })}
+              </div>
+            </CardContent>
+          </Card>
         )}
 
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <Card>
             <CardHeader>
-              <CardTitle className="text-sm">Strengths</CardTitle>
+              <CardTitle className="flex items-center gap-1.5 text-sm">
+                Strengths
+                <InfoTip>
+                  The competencies where your graded work scores highest on average, based on how
+                  Tanza tags each question. These are the skills to lean on.
+                </InfoTip>
+              </CardTitle>
             </CardHeader>
             <CardContent className="flex flex-wrap gap-2">
               {strengths.length === 0 ? (
                 <p className="text-sm text-muted-foreground">Not enough graded work yet.</p>
               ) : (
                 strengths.map((s) => (
-                  <Badge key={s.termId} variant="default">
+                  <Badge key={s.termId} variant="solid-navy">
                     {s.name}
                   </Badge>
                 ))
@@ -248,7 +274,13 @@ export default async function MePage() {
           </Card>
           <Card>
             <CardHeader>
-              <CardTitle className="text-sm">Focus next</CardTitle>
+              <CardTitle className="flex items-center gap-1.5 text-sm">
+                Focus next
+                <InfoTip>
+                  Your lowest-scoring competencies so far — the best places to direct effort. This
+                  updates as more of your work is graded, so early on it&rsquo;s a hint, not a verdict.
+                </InfoTip>
+              </CardTitle>
             </CardHeader>
             <CardContent className="flex flex-wrap gap-2">
               {focusNext.length === 0 ? (
@@ -265,16 +297,20 @@ export default async function MePage() {
         </div>
 
         <div className="flex flex-col gap-1.5">
-          <Progress value={progressPct} />
-          <p className="text-sm text-muted-foreground">
+          <Progress value={progressPct} className="h-2 bg-track" />
+          <p className="flex items-center gap-1.5 text-sm text-muted-foreground">
             {releasedCount} of {totalCount} classes
             {pendingCount > 0 && ` · ${pendingCount} assessment${pendingCount === 1 ? "" : "s"} pending`}
+            <InfoTip>
+              How much of your cohort&rsquo;s curriculum has been released to you so far — not a grade.
+              &ldquo;Pending&rdquo; counts submissions still waiting on Tanza&rsquo;s grading.
+            </InfoTip>
           </p>
         </div>
       </div>
 
       <div className="flex flex-col gap-3">
-        <h2 className="text-lg font-semibold">Your coursework</h2>
+        <h2 className="font-heading text-lg font-semibold text-navy-900">Your coursework</h2>
         {rows.length === 0 ? (
           <p className="text-sm text-muted-foreground">No submissions yet — start a class assessment from your journey.</p>
         ) : (
@@ -283,8 +319,8 @@ export default async function MePage() {
               <Card key={sub.id}>
                 <CardContent className="flex items-center justify-between gap-4 py-4">
                   <div>
-                    <p className="font-medium">{result?.assessmentTitle ?? "Assessment"}</p>
-                    <p className="text-sm text-muted-foreground">
+                    <p className="font-medium text-navy-900">{result?.assessmentTitle ?? "Assessment"}</p>
+                    <p className="text-sm text-text-faint">
                       {location ? `${location.moduleTitle} · ${location.classTitle} · ` : null}
                       Submitted {sub.submittedAt.toLocaleDateString()}
                     </p>
@@ -292,11 +328,11 @@ export default async function MePage() {
                   <div className="flex items-center gap-3">
                     {result && (
                       <>
-                        <Badge variant={result.allReleased ? "default" : "outline"}>
+                        <Badge variant={result.allReleased ? "solid-navy" : "outline"}>
                           {result.allReleased ? "Graded" : "Submitted"}
                         </Badge>
                         {result.releasedMax > 0 && (
-                          <span className="text-sm font-medium">
+                          <span className="font-heading text-[15px] font-semibold text-navy-900">
                             {result.releasedScore}/{result.releasedMax} pts
                           </span>
                         )}

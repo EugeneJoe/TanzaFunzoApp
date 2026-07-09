@@ -1,7 +1,6 @@
 "use server";
 
 import { eq } from "drizzle-orm";
-import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { requireRole } from "@/lib/auth";
 import { db } from "@/db";
@@ -48,7 +47,6 @@ export async function publishAction(classId: string) {
   });
 
   revalidatePath(`/admin/curriculum/class/${classId}`);
-  redirect(`/admin/curriculum/class/${classId}`);
 }
 
 /**

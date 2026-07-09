@@ -4,12 +4,41 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/* Tanza Ventures brand tokens (design_handoff_tanza_restyle) — static, no
+   light/dark variants by design (the app has no theme toggle). */
+@theme {
+  --color-navy: #132239;
+  --color-navy-900: #152744;
+  --color-orange: #de5a1c;
+  --color-orange-hover: #b8460f;
+  --color-orange-tint: #fdeee4;
+  --color-page-bg: #f4f6f9;
+  --color-card-alt: #eef1f4;
+  --color-card-faint: #fbfcfd;
+  --color-track: #e1e6ec;
+  --color-track-faint: #eceff3;
+  --color-track-band: #d3d9e1;
+  --color-row-disabled: #f7f8fa;
+  --color-text-body: #3a4a66;
+  --color-text-faint: #8a97ac;
+  --color-text-input: #1e2b45;
+  --color-success: #2e7d53;
+  --color-success-text: #1e5a38;
+  --color-success-border: #b7dec4;
+  --color-success-bg: #edf7f0;
+  --color-error: #c44a2e;
+  --color-error-text: #8a3320;
+  --color-error-border: #e7b9b0;
+  --color-error-bg: #fbeeeb;
+  --color-warning-text: #b26a1b;
+  --color-warning-bg: #fbefd8;
+}
+
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-sans);
-  --font-mono: var(--font-geist-mono);
-  --font-heading: var(--font-sans);
+  --font-heading: var(--font-heading);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -49,22 +78,22 @@
 }
 
 :root {
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
+  --card: #ffffff;
+  --card-foreground: var(--color-navy-900);
+  --popover: #ffffff;
+  --popover-foreground: var(--color-navy-900);
+  --primary: var(--color-orange);
+  --primary-foreground: #ffffff;
+  --secondary: var(--color-navy-900);
+  --secondary-foreground: #ffffff;
+  --muted: var(--color-card-alt);
+  --muted-foreground: #6c7a93;
+  --accent: var(--color-card-alt);
+  --accent-foreground: var(--color-navy-900);
   --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
+  --border: #e4e8ee;
+  --input: #d6dbe3;
+  --ring: var(--color-orange);
   --chart-1: oklch(0.87 0 0);
   --chart-2: oklch(0.556 0 0);
   --chart-3: oklch(0.439 0 0);
@@ -79,8 +108,8 @@
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
+  --background: var(--color-page-bg);
+  --foreground: var(--color-navy-900);
 }
 
 .dark {
@@ -127,25 +156,36 @@
   html {
     @apply font-sans;
   }
+  h1,
+  h2,
+  h3,
+  h4,
+  [data-slot="button"],
+  [data-slot="badge"] {
+    @apply font-heading;
+  }
 }
 
 /* Shared between the TipTap editor (builder) and the read-only block
    renderer (preview + fellow view) so authored content looks the same in
    both places without pulling in the Tailwind Typography plugin. */
+.richtext-content {
+  @apply text-[15px] text-text-body sm:text-base;
+}
 .richtext-content h2 {
-  @apply mt-4 mb-2 text-xl font-semibold first:mt-0;
+  @apply mt-4 mb-2 font-heading text-xl font-semibold text-navy-900 first:mt-0;
 }
 .richtext-content h3 {
-  @apply mt-3 mb-2 text-lg font-semibold first:mt-0;
+  @apply mt-3 mb-2 font-heading text-lg font-semibold text-navy-900 first:mt-0;
 }
 .richtext-content p {
-  @apply mb-3 leading-relaxed last:mb-0;
+  @apply mb-3 leading-[1.7] last:mb-0;
 }
 .richtext-content ul {
-  @apply mb-3 list-disc pl-6;
+  @apply mb-3 list-disc pl-[22px] leading-[1.9];
 }
 .richtext-content ol {
-  @apply mb-3 list-decimal pl-6;
+  @apply mb-3 list-decimal pl-[22px] leading-[1.9];
 }
 .richtext-content blockquote {
   @apply border-l-2 pl-4 italic text-muted-foreground;

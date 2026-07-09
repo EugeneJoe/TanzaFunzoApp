@@ -29,7 +29,7 @@ export default async function PreviewPage({ params }: { params: Promise<{ classI
           <Link href={`/admin/curriculum/class/${classId}`}>Back to builder</Link>
         </Button>
       </div>
-      <div className="flex flex-col gap-6 p-6">
+      <div className="mx-auto flex w-full max-w-[780px] flex-col gap-6 p-6">
         <BlockRenderer blocks={blocks} classId={classId} mode="preview" />
         <Separator />
         <div>

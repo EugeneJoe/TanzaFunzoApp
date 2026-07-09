@@ -6,9 +6,11 @@ import { pageVersions } from "@/db/schema";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { SubmitButton } from "@/components/ui/submit-button";
 import { BlockCard } from "./block-card";
 import { addBlockAction } from "./actions";
-import { publishAction, restoreVersionAction } from "./publish-actions";
+import { restoreVersionAction } from "./publish-actions";
+import { PublishButton } from "./publish-button";
 
 export default async function ClassBuilderPage({ params }: { params: Promise<{ classId: string }> }) {
   const { classId } = await params;
@@ -54,13 +56,16 @@ export default async function ClassBuilderPage({ params }: { params: Promise<{ c
             <Button asChild variant="secondary">
               <Link href={`/admin/curriculum/class/${classId}/preview`}>Preview as fellow</Link>
             </Button>
-            <form action={publishAction.bind(null, classId)}>
-              <Button type="submit">Publish</Button>
-            </form>
+            <PublishButton classId={classId} />
           </div>
         </div>
 
         <div className="flex flex-col gap-3">
+          {blocks.length === 0 && (
+            <p className="rounded-lg border border-dashed p-8 text-center text-sm text-muted-foreground italic">
+              No blocks yet — add one below to start building this class.
+            </p>
+          )}
           {blocks.map((block, index) => (
             <BlockCard
               key={block.id}
@@ -76,24 +81,24 @@ export default async function ClassBuilderPage({ params }: { params: Promise<{ c
         <div className="flex items-center gap-2 rounded-lg border border-dashed p-3">
           <span className="text-sm text-muted-foreground">Add block:</span>
           <form action={addBlockAction.bind(null, classId, "rich_text")}>
-            <Button type="submit" size="sm" variant="outline">
+            <SubmitButton size="sm" variant="outline" pendingText="Adding…">
               Rich text
-            </Button>
+            </SubmitButton>
           </form>
           <form action={addBlockAction.bind(null, classId, "video")}>
-            <Button type="submit" size="sm" variant="outline">
+            <SubmitButton size="sm" variant="outline" pendingText="Adding…">
               Video
-            </Button>
+            </SubmitButton>
           </form>
           <form action={addBlockAction.bind(null, classId, "resource_list")}>
-            <Button type="submit" size="sm" variant="outline">
+            <SubmitButton size="sm" variant="outline" pendingText="Adding…">
               Resources
-            </Button>
+            </SubmitButton>
           </form>
           <form action={addBlockAction.bind(null, classId, "assessment")}>
-            <Button type="submit" size="sm" variant="outline">
+            <SubmitButton size="sm" variant="outline" pendingText="Adding…">
               Assessment
-            </Button>
+            </SubmitButton>
           </form>
         </div>
       </div>
@@ -127,9 +132,9 @@ export default async function ClassBuilderPage({ params }: { params: Promise<{ c
                 </span>
                 {v.publishedAt ? (
                   <form action={restoreVersionAction.bind(null, classId, v.id)}>
-                    <Button type="submit" size="sm" variant="ghost" className="h-6 px-2 text-xs">
+                    <SubmitButton size="sm" variant="ghost" className="h-6 px-2 text-xs" pendingText="Restoring…">
                       Restore
-                    </Button>
+                    </SubmitButton>
                   </form>
                 ) : (
                   <span className="text-muted-foreground">editing</span>

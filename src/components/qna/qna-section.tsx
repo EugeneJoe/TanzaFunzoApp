@@ -2,7 +2,7 @@ import { and, asc, desc, eq } from "drizzle-orm";
 import { db } from "@/db";
 import { classQuestionReplies, classQuestions, roles, userRoles } from "@/db/schema";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
+import { SubmitButton } from "@/components/ui/submit-button";
 import { Textarea } from "@/components/ui/textarea";
 import { formatRelativeTime } from "@/lib/format";
 import {
@@ -57,110 +57,116 @@ export async function QnaSection({ classId, viewer }: { classId: string; viewer:
 
   return (
     <div className="flex flex-col gap-4">
-      <h2 className="text-lg font-semibold">Questions</h2>
+      <h2 className="font-heading text-lg font-semibold text-navy-900">Questions</h2>
 
-      {viewer.kind === "fellow" && (
-        <form action={postQuestionAction.bind(null, classId)} className="flex flex-col gap-2">
-          <Textarea name="body" placeholder="Ask about this class" required maxLength={2000} rows={2} />
-          <Button type="submit" size="sm" className="self-start">
-            Post question
-          </Button>
-        </form>
-      )}
+      <div className="flex flex-col gap-4 rounded-[10px] border border-border bg-card-faint p-[18px]">
+        {viewer.kind === "fellow" && (
+          <form action={postQuestionAction.bind(null, classId)} className="flex flex-col gap-2">
+            <Textarea name="body" placeholder="Ask about this class" required maxLength={2000} rows={2} className="bg-card" />
+            <SubmitButton size="sm" variant="secondary" className="self-end" pendingText="Posting…">
+              Post question
+            </SubmitButton>
+          </form>
+        )}
 
-      {questionList.length === 0 && <p className="text-sm text-muted-foreground">No questions yet.</p>}
+        {questionList.length === 0 && <p className="text-sm text-text-faint">No questions yet.</p>}
 
-      {questionList.map((q) => {
-        const canDeleteQuestion = q.authorId === viewer.userId;
-        return (
-          <div key={q.id} className="flex flex-col gap-3 rounded-lg border p-4">
-            <div className="flex items-start justify-between gap-2">
-              <div>
-                <p className="text-sm font-medium">
-                  {q.author.fullName}
-                  {isAdminViewer && <span className="ml-2 font-normal text-muted-foreground">{q.cohort.name}</span>}
-                  <span className="ml-2 font-normal text-xs text-muted-foreground">
-                    {formatRelativeTime(q.createdAt)}
-                  </span>
-                  {q.status === "hidden" && (
-                    <Badge variant="destructive" className="ml-2">
-                      Hidden
-                    </Badge>
+        {questionList.map((q) => {
+          const canDeleteQuestion = q.authorId === viewer.userId;
+          return (
+            <div key={q.id} className="flex flex-col gap-3 rounded-lg border border-border bg-card p-4">
+              <div className="flex items-start justify-between gap-2">
+                <div>
+                  <p className="text-sm font-medium text-navy-900">
+                    {q.author.fullName}
+                    {isAdminViewer && <span className="ml-2 font-normal text-muted-foreground">{q.cohort.name}</span>}
+                    <span className="ml-2 font-normal text-xs text-text-faint">
+                      {formatRelativeTime(q.createdAt)}
+                    </span>
+                    {q.status === "hidden" && (
+                      <Badge variant="destructive" className="ml-2">
+                        Hidden
+                      </Badge>
+                    )}
+                  </p>
+                  <p className="mt-1 text-sm whitespace-pre-wrap">{q.body}</p>
+                </div>
+                <div className="flex shrink-0 items-center gap-1">
+                  {isAdminViewer && (
+                    <form action={setQuestionVisibilityAction.bind(null, classId, q.id, q.status === "visible")}>
+                      <SubmitButton size="sm" variant="ghost" pendingText={q.status === "visible" ? "Hiding…" : "Unhiding…"}>
+                        {q.status === "visible" ? "Hide" : "Unhide"}
+                      </SubmitButton>
+                    </form>
                   )}
-                </p>
-                <p className="mt-1 text-sm whitespace-pre-wrap">{q.body}</p>
+                  {canDeleteQuestion && (
+                    <form action={deleteOwnQuestionAction.bind(null, classId, q.id)}>
+                      <SubmitButton size="sm" variant="ghost" pendingText="Deleting…">
+                        Delete
+                      </SubmitButton>
+                    </form>
+                  )}
+                </div>
               </div>
-              <div className="flex shrink-0 items-center gap-1">
-                {isAdminViewer && (
-                  <form action={setQuestionVisibilityAction.bind(null, classId, q.id, q.status === "visible")}>
-                    <Button type="submit" size="sm" variant="ghost">
-                      {q.status === "visible" ? "Hide" : "Unhide"}
-                    </Button>
-                  </form>
-                )}
-                {canDeleteQuestion && (
-                  <form action={deleteOwnQuestionAction.bind(null, classId, q.id)}>
-                    <Button type="submit" size="sm" variant="ghost">
-                      Delete
-                    </Button>
-                  </form>
-                )}
-              </div>
-            </div>
 
-            {q.replies.length > 0 && (
-              <div className="flex flex-col gap-3 border-l-2 pl-4">
-                {q.replies.map((r) => {
-                  const isAdminReply = adminIds.has(r.authorId);
-                  const canDeleteReply = r.authorId === viewer.userId;
-                  return (
-                    <div key={r.id} className="flex items-start justify-between gap-2">
-                      <div>
-                        <p className="text-sm font-medium">
-                          {r.author.fullName}
-                          {isAdminReply && <Badge className="ml-2">Tanza</Badge>}
-                          <span className="ml-2 font-normal text-xs text-muted-foreground">
-                            {formatRelativeTime(r.createdAt)}
-                          </span>
-                          {r.status === "hidden" && (
-                            <Badge variant="destructive" className="ml-2">
-                              Hidden
-                            </Badge>
+              {q.replies.length > 0 && (
+                <div className="flex flex-col gap-3 border-l-2 border-border pl-4">
+                  {q.replies.map((r) => {
+                    const isAdminReply = adminIds.has(r.authorId);
+                    const canDeleteReply = r.authorId === viewer.userId;
+                    return (
+                      <div key={r.id} className="flex items-start justify-between gap-2">
+                        <div>
+                          <p className="text-sm font-medium text-navy-900">
+                            {r.author.fullName}
+                            {isAdminReply && (
+                              <Badge variant="solid-navy" className="ml-2">
+                                Tanza
+                              </Badge>
+                            )}
+                            <span className="ml-2 font-normal text-xs text-text-faint">
+                              {formatRelativeTime(r.createdAt)}
+                            </span>
+                            {r.status === "hidden" && (
+                              <Badge variant="destructive" className="ml-2">
+                                Hidden
+                              </Badge>
+                            )}
+                          </p>
+                          <p className="mt-1 text-sm whitespace-pre-wrap">{r.body}</p>
+                        </div>
+                        <div className="flex shrink-0 items-center gap-1">
+                          {isAdminViewer && (
+                            <form action={setReplyVisibilityAction.bind(null, classId, r.id, r.status === "visible")}>
+                              <SubmitButton size="sm" variant="ghost" pendingText={r.status === "visible" ? "Hiding…" : "Unhiding…"}>
+                                {r.status === "visible" ? "Hide" : "Unhide"}
+                              </SubmitButton>
+                            </form>
                           )}
-                        </p>
-                        <p className="mt-1 text-sm whitespace-pre-wrap">{r.body}</p>
+                          {canDeleteReply && (
+                            <form action={deleteOwnReplyAction.bind(null, classId, r.id)}>
+                              <SubmitButton size="sm" variant="ghost" pendingText="Deleting…">
+                                Delete
+                              </SubmitButton>
+                            </form>
+                          )}
+                        </div>
                       </div>
-                      <div className="flex shrink-0 items-center gap-1">
-                        {isAdminViewer && (
-                          <form action={setReplyVisibilityAction.bind(null, classId, r.id, r.status === "visible")}>
-                            <Button type="submit" size="sm" variant="ghost">
-                              {r.status === "visible" ? "Hide" : "Unhide"}
-                            </Button>
-                          </form>
-                        )}
-                        {canDeleteReply && (
-                          <form action={deleteOwnReplyAction.bind(null, classId, r.id)}>
-                            <Button type="submit" size="sm" variant="ghost">
-                              Delete
-                            </Button>
-                          </form>
-                        )}
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            )}
+                    );
+                  })}
+                </div>
+              )}
 
-            <form action={postReplyAction.bind(null, classId, q.id)} className="flex flex-col gap-2 pl-4">
-              <Textarea name="body" placeholder="Reply" required maxLength={2000} rows={1} />
-              <Button type="submit" size="sm" variant="outline" className="self-start">
-                Reply
-              </Button>
-            </form>
-          </div>
-        );
-      })}
+              <form action={postReplyAction.bind(null, classId, q.id)} className="flex flex-col gap-2 pl-4">
+                <Textarea name="body" placeholder="Reply" required maxLength={2000} rows={1} />
+                <SubmitButton size="sm" variant="outline" className="self-start" pendingText="Replying…">
+                  Reply
+                </SubmitButton>
+              </form>
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
 }

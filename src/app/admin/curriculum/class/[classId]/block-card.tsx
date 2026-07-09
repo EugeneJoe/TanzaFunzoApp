@@ -1,7 +1,7 @@
 import { ArrowDown, ArrowUp, ClipboardList, FileStack, Trash2, Type, Video } from "lucide-react";
 import { db } from "@/db";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { SubmitButton } from "@/components/ui/submit-button";
 import type { BlockConfigMap, BlockType } from "@/db/schema";
 import { removeBlockAction, reorderBlockAction } from "./actions";
 import { RichTextEditor } from "./editors/rich-text-editor";
@@ -44,19 +44,19 @@ export async function BlockCard({
         </div>
         <div className="flex items-center gap-1">
           <form action={reorderBlockAction.bind(null, block.id, pageVersionId, classId, "up")}>
-            <Button type="submit" size="icon" variant="ghost" disabled={index === 0}>
+            <SubmitButton size="icon" variant="ghost" disabled={index === 0}>
               <ArrowUp className="size-4" />
-            </Button>
+            </SubmitButton>
           </form>
           <form action={reorderBlockAction.bind(null, block.id, pageVersionId, classId, "down")}>
-            <Button type="submit" size="icon" variant="ghost" disabled={index === count - 1}>
+            <SubmitButton size="icon" variant="ghost" disabled={index === count - 1}>
               <ArrowDown className="size-4" />
-            </Button>
+            </SubmitButton>
           </form>
           <form action={removeBlockAction.bind(null, block.id, classId)}>
-            <Button type="submit" size="icon" variant="ghost">
+            <SubmitButton size="icon" variant="ghost">
               <Trash2 className="size-4" />
-            </Button>
+            </SubmitButton>
           </form>
         </div>
       </CardHeader>

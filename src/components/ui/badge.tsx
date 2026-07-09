@@ -10,15 +10,22 @@ const badgeVariants = cva(
     variants: {
       variant: {
         default: "bg-primary text-primary-foreground [a]:hover:bg-primary/80",
-        secondary:
-          "bg-secondary text-secondary-foreground [a]:hover:bg-secondary/80",
+        // Neutral chip — deliberately not tied to --secondary (which is navy
+        // for buttons); stays the "active"/tag/pill grey from the brand
+        // handoff regardless of the button token remap.
+        secondary: "bg-card-alt text-muted-foreground [a]:hover:bg-card-alt/70",
         destructive:
           "bg-destructive/10 text-destructive focus-visible:ring-destructive/20 dark:bg-destructive/20 dark:focus-visible:ring-destructive/40 [a]:hover:bg-destructive/20",
         outline:
-          "border-border text-foreground [a]:hover:bg-muted [a]:hover:text-muted-foreground",
+          "border-input text-foreground [a]:hover:bg-muted [a]:hover:text-muted-foreground",
         ghost:
           "hover:bg-muted hover:text-muted-foreground dark:hover:bg-muted/50",
         link: "text-primary underline-offset-4 hover:underline",
+        "solid-navy": "bg-navy-900 text-white [a]:hover:bg-navy-900/90",
+        "orange-tint": "bg-orange-tint text-orange",
+        success: "border-success-border bg-success-bg text-success-text",
+        warning: "border-transparent bg-warning-bg text-warning-text",
+        error: "border-error-border bg-error-bg text-error-text",
       },
     },
     defaultVariants: {

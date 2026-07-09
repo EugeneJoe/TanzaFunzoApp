@@ -6,6 +6,7 @@ import { aptitudeWeights, assessmentQuestions, submissions, terms } from "@/db/s
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { SubmitButton } from "@/components/ui/submit-button";
 import { computeWeightsRollup } from "@/lib/assessment-rollup";
 import { QuestionCard } from "./question-card";
 import { addQuestionAction, duplicateAndRedirectAction, updateAttemptsAction } from "./actions";
@@ -105,11 +106,17 @@ export default async function AssessmentEditorPage({
             This assessment already has submissions, so it&apos;s locked to keep those results consistent.
           </p>
           <form action={duplicateAndRedirectAction.bind(null, assessmentId, from ?? null)}>
-            <Button type="submit" variant="outline">
+            <SubmitButton variant="outline" pendingText="Duplicating…">
               Duplicate to edit
-            </Button>
+            </SubmitButton>
           </form>
         </div>
+      )}
+
+      {links.length === 0 && (
+        <p className="rounded-lg border border-dashed p-8 text-center text-sm text-muted-foreground italic">
+          No questions yet — add one below.
+        </p>
       )}
 
       <div className="flex flex-col gap-3">
@@ -146,14 +153,14 @@ export default async function AssessmentEditorPage({
         <div className="flex items-center gap-2 rounded-lg border border-dashed p-3">
           <span className="text-sm text-muted-foreground">Add question:</span>
           <form action={addQuestionAction.bind(null, assessmentId, "mc")}>
-            <Button type="submit" size="sm" variant="outline">
+            <SubmitButton size="sm" variant="outline" pendingText="Adding…">
               Multiple choice
-            </Button>
+            </SubmitButton>
           </form>
           <form action={addQuestionAction.bind(null, assessmentId, "short_answer")}>
-            <Button type="submit" size="sm" variant="outline">
+            <SubmitButton size="sm" variant="outline" pendingText="Adding…">
               Short answer
-            </Button>
+            </SubmitButton>
           </form>
           <span className="ml-2 text-xs text-muted-foreground">From bank — post-beta</span>
         </div>

@@ -56,12 +56,12 @@ export function AssessmentForm({
       {questions.map((q, i) => (
         <Card key={q.questionId}>
           <CardHeader>
-            <CardTitle className="text-base">
-              Q{i + 1} · {Number(q.points)} pts
+            <CardTitle className="text-sm font-semibold text-orange">
+              Q{i + 1} <span className="font-sans font-normal text-muted-foreground">· {Number(q.points)} pts</span>
             </CardTitle>
           </CardHeader>
           <CardContent className="flex flex-col gap-3">
-            <p className="text-sm">{q.body}</p>
+            <p className="text-sm text-navy-900">{q.body}</p>
             {q.type === "mc" ? (
               <RadioGroup value={answers[q.questionId] ?? ""} onValueChange={(v) => setAnswer(q.questionId, v)}>
                 <div className="flex flex-col gap-2">

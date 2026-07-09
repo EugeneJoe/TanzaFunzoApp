@@ -67,8 +67,9 @@ export function QuestionCard({
       isFirstRun.current = false;
       return;
     }
-    if (locked) return;
     if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    if (locked) return;
+    if (type === "mc" && options.some((o) => o.text.trim().length === 0)) return;
     timeoutRef.current = setTimeout(() => {
       if (type === "mc") {
         updateMCQuestionAction(assessmentId, questionId, body, options, correctOptionId);

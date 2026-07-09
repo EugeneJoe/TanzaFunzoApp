@@ -1,0 +1,885 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;600;700&family=Mulish:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  body { margin: 0; font-family: 'Mulish', system-ui, sans-serif; -webkit-font-smoothing: antialiased; background: #DDE2E8; }
+  a { color: #DE5A1C; text-decoration: none; }
+  a:hover { color: #b8460f; }
+</style>
+</helmet>
+
+<section style="padding: 56px; display: flex; flex-direction: column; gap: 56px; align-items: flex-start; background: #DDE2E8; min-height: 100vh;">
+
+  <!-- ============ 2A — CLASS / LESSON VIEW ============ -->
+  <div id="2a" style="display: flex; flex-direction: column; gap: 16px;">
+    <div style="display: flex; align-items: baseline; gap: 14px;">
+      <span style="background: #DE5A1C; color: #fff; font-family: 'Jost'; font-weight: 600; font-size: 15px; letter-spacing: 1px; padding: 6px 14px; border-radius: 4px;">2A</span>
+      <div>
+        <div style="font-family: 'Jost'; font-weight: 600; font-size: 20px; color: #152744;">Class / lesson view</div>
+        <div style="font-family: 'Mulish'; font-size: 13px; color: #5a6a82;">Navy sidebar + progress rail, 1A rich-text / resources / assessment, readable questions block.</div>
+      </div>
+    </div>
+
+    <div style="width: 1180px; min-height: 900px; background: #F4F6F9; border-radius: 8px; overflow: hidden; box-shadow: 0 30px 70px -30px rgba(21,39,68,0.4); font-family: 'Mulish'; display: flex;">
+      <!-- SIDEBAR (with module + progress) -->
+      <div style="width: 244px; flex-shrink: 0; background: #132239; background-image: url(&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='90' height='78'%3E%3Cpath d='M0 78 L45 0 L90 78' fill='none' stroke='%23ffffff' stroke-opacity='0.04' stroke-width='1'/%3E%3Cpath d='M-45 78 L0 0 L45 78' fill='none' stroke='%23ffffff' stroke-opacity='0.04' stroke-width='1'/%3E%3Cpath d='M45 78 L90 0 L135 78' fill='none' stroke='%23ffffff' stroke-opacity='0.04' stroke-width='1'/%3E%3C/svg%3E&quot;); display: flex; flex-direction: column; padding: 28px 0;">
+        <div style="padding: 0 26px 30px;">
+          <div style="font-family: 'Jost'; font-weight: 600; letter-spacing: 2px; font-size: 14px; color: #fff; text-transform: uppercase; line-height: 1.3;">Tanza<br><span style="color:#DE5A1C;">Fellowship</span></div>
+        </div>
+        <nav style="display: flex; flex-direction: column; gap: 2px; font-family: 'Jost'; font-weight: 500; font-size: 14px;">
+          <span style="padding: 12px 26px; color: #fff; background: rgba(222,90,28,0.16); border-left: 3px solid #DE5A1C; display: flex; align-items: center; gap: 12px;"><span style="color:#DE5A1C;">&#9673;</span> My journey</span>
+          <span style="padding: 12px 26px; color: #9FB0C8; display: flex; align-items: center; gap: 12px;"><span style="opacity:.7;">&#9673;</span> My coursework</span>
+        </nav>
+        <div style="margin: 22px 26px; height: 1px; background: rgba(255,255,255,0.08);"></div>
+        <div style="padding: 0 26px;">
+          <div style="font-family: 'Jost'; font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; color: #5E708C; margin-bottom: 14px;">QA Test Module</div>
+          <div style="font-size: 13px;">
+            <span style="color: #fff; display: flex; align-items: center; gap: 10px;"><span style="width:18px;height:18px;border-radius:50%;background:#DE5A1C;color:#fff;font-size:10px;display:flex;align-items:center;justify-content:center;">1</span> QA Test Class</span>
+          </div>
+        </div>
+        <div style="margin-top: auto; padding: 0 26px;">
+          <div style="display: flex; align-items: center; gap: 10px; padding-top: 14px; border-top: 1px solid rgba(255,255,255,0.08);">
+            <div style="width: 32px; height: 32px; border-radius: 50%; background: #DE5A1C; color: #fff; font-family: 'Jost'; font-weight: 600; display: flex; align-items: center; justify-content: center; font-size: 13px;">EM</div>
+            <div style="font-size: 13px; color: #C9D4E2; line-height: 1.25;">Eugene Muthui<br><span style="color:#7C8DA6; font-size: 11px; cursor: pointer;">Log out</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- MAIN -->
+      <div style="flex: 1; overflow-y: auto;">
+        <div style="padding: 34px 48px 54px; max-width: 780px;">
+          <!-- progress rail -->
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px;">
+            <div style="font-family: 'Jost'; font-weight: 500; font-size: 12px; letter-spacing: 1.5px; text-transform: uppercase; color: #8A97AC;">QA Test Module · Class 1 of 1</div>
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <div style="width: 130px; height: 6px; border-radius: 3px; background: #E1E6EC; overflow: hidden;"><div style="width: 35%; height: 100%; background: #DE5A1C;"></div></div>
+              <span style="font-size: 12px; color: #6C7A93; font-weight: 600;">35%</span>
+            </div>
+          </div>
+
+          <h1 style="font-family: 'Jost'; font-weight: 600; font-size: 38px; color: #152744; margin: 0 0 8px;">QA Test Class</h1>
+          <div style="font-size: 13px; color: #8A97AC; margin-bottom: 32px;">Released 7/8/2026 · Updated 7/8/2026</div>
+
+          <!-- rich text (1A style) -->
+          <h2 style="font-family: 'Jost'; font-weight: 600; font-size: 24px; color: #152744; margin: 0 0 12px;">Testing Class Builder</h2>
+          <p style="font-size: 16px; line-height: 1.7; color: #3A4A66; margin: 0 0 18px;">This is a rich text block.</p>
+          <ul style="margin: 0 0 22px; padding-left: 22px; color: #3A4A66; font-size: 16px; line-height: 1.9;">
+            <li>It can contain bullet points</li>
+            <li>To highlight <em>important</em> points.</li>
+          </ul>
+          <p style="font-size: 16px; line-height: 1.7; color: #3A4A66; margin: 0 0 14px;">It can also support numbered points to show step-by-step instructions:</p>
+          <ol style="margin: 0 0 22px; padding-left: 22px; color: #3A4A66; font-size: 16px; line-height: 1.9;">
+            <li>Click on <strong style="color:#152744;">Rich text</strong>.</li>
+            <li>Add text in the desired format.</li>
+            <li>Move to another block.</li>
+          </ol>
+          <p style="font-size: 16px; line-height: 1.7; color: #3A4A66; margin: 0;">Fantastic user experience.</p>
+
+          <!-- resources (1A style) -->
+          <div style="font-family: 'Jost'; font-weight: 600; font-size: 12px; letter-spacing: 2px; text-transform: uppercase; color: #DE5A1C; margin: 40px 0 16px;">Resources</div>
+          <div style="display: flex; flex-direction: column; gap: 12px;">
+            <div style="display: flex; align-items: center; justify-content: space-between; border: 1px solid #E4E8EE; border-left: 3px solid #DE5A1C; border-radius: 6px; padding: 16px 20px; background: #fff;">
+              <div style="display: flex; align-items: center; gap: 14px;">
+                <div style="width: 34px; height: 34px; border-radius: 6px; background: #FDEEE4; display: flex; align-items: center; justify-content: center; color: #DE5A1C; font-size: 16px;">&#128279;</div>
+                <span style="font-size: 15px; font-weight: 600; color: #152744;">AI and Change Management</span>
+              </div>
+              <span style="font-size: 12px; color: #8A97AC; letter-spacing: 0.3px;">opens in browser</span>
+            </div>
+            <div style="display: flex; align-items: center; justify-content: space-between; border: 1px solid #E4E8EE; border-left: 3px solid #DE5A1C; border-radius: 6px; padding: 16px 20px; background: #fff;">
+              <div style="display: flex; align-items: center; gap: 14px;">
+                <div style="width: 34px; height: 34px; border-radius: 6px; background: #EEF1F4; display: flex; align-items: center; justify-content: center; color: #152744; font-size: 16px;">&#128196;</div>
+                <span style="font-size: 15px; font-weight: 600; color: #152744;">Tanza Franchise_Overview deck_to share</span>
+              </div>
+              <span style="font-size: 12px; color: #8A97AC; letter-spacing: 0.3px;">PDF · 3.7 MB</span>
+            </div>
+          </div>
+
+          <!-- video -->
+          <div style="margin-top: 34px; border-radius: 8px; overflow: hidden;">
+            <div style="position: relative; aspect-ratio: 16/8; background: repeating-linear-gradient(135deg, #1c3050 0 14px, #182a49 14px 28px); display: flex; align-items: center; justify-content: center;">
+              <div style="width: 64px; height: 64px; border-radius: 50%; background: rgba(255,255,255,0.14); border: 2px solid rgba(255,255,255,0.85); display: flex; align-items: center; justify-content: center;">
+                <div style="width: 0; height: 0; border-left: 18px solid #fff; border-top: 11px solid transparent; border-bottom: 11px solid transparent; margin-left: 5px;"></div>
+              </div>
+              <div style="position: absolute; left: 18px; bottom: 14px; font-family: 'Mulish'; font-size: 12px; color: rgba(255,255,255,0.8);">Tap to stream · adapts to your connection</div>
+              <div style="position: absolute; right: 18px; top: 16px; font-family: monospace; font-size: 11px; color: rgba(255,255,255,0.45); letter-spacing: 1px;">video placeholder</div>
+            </div>
+          </div>
+          <div style="font-size: 13px; color: #6C7A93; margin-top: 12px; font-style: italic;">A Decade of Partnership: Working Together for a More Resilient Tanzania</div>
+
+          <!-- assessment (1A style) -->
+          <div style="margin-top: 34px; border: 1px solid #E4E8EE; border-radius: 8px; padding: 26px 28px; background: #EEF1F4;">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+              <div>
+                <div style="font-family: 'Jost'; font-weight: 600; font-size: 19px; color: #152744;">Untitled assessment</div>
+                <div style="font-size: 13px; color: #6C7A93; margin-top: 5px;">2 questions · about 4 minutes</div>
+              </div>
+              <span style="font-size: 11px; font-family: 'Jost'; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; color: #8A97AC; border: 1px solid #D6DBE3; background: #fff; padding: 5px 11px; border-radius: 20px;">Not started</span>
+            </div>
+            <button style="margin-top: 20px; background: #DE5A1C; color: #fff; border: none; font-family: 'Jost'; font-weight: 600; font-size: 14px; letter-spacing: 0.5px; padding: 13px 26px; border-radius: 5px; cursor: pointer;">Start assessment</button>
+          </div>
+
+          <!-- questions (1C block, readable colours) -->
+          <div style="margin-top: 40px;">
+            <h3 style="font-family: 'Jost'; font-weight: 600; font-size: 20px; color: #152744; margin: 0 0 14px;">Questions</h3>
+            <div style="background: #FBFCFD; border: 1px solid #EAEEF3; border-radius: 10px; padding: 18px;">
+              <textarea placeholder="What is the full structure of the education department in the Tanzanian government?" style="width: 100%; min-height: 76px; resize: none; border: 1px solid #E4E8EE; border-radius: 8px; padding: 13px 15px; font-family: 'Mulish'; font-size: 15px; color: #1E2B45; background: #fff;"></textarea>
+              <div style="display: flex; justify-content: flex-end; margin-top: 12px;">
+                <button style="background: #152744; color: #fff; border: none; font-family: 'Jost'; font-weight: 600; font-size: 13px; padding: 11px 22px; border-radius: 6px; cursor: pointer;">Post question</button>
+              </div>
+            </div>
+            <div style="font-size: 14px; color: #4A4436; margin-top: 16px;">No questions yet.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ 2B — MY JOURNEY ============ -->
+  <div id="2b" style="display: flex; flex-direction: column; gap: 16px;">
+    <div style="display: flex; align-items: baseline; gap: 14px;">
+      <span style="background: #DE5A1C; color: #fff; font-family: 'Jost'; font-weight: 600; font-size: 15px; letter-spacing: 1px; padding: 6px 14px; border-radius: 4px;">2B</span>
+      <div style="font-family: 'Jost'; font-weight: 600; font-size: 20px; color: #152744;">My journey</div>
+    </div>
+
+    <div style="width: 1180px; min-height: 620px; background: #F4F6F9; border-radius: 8px; overflow: hidden; box-shadow: 0 30px 70px -30px rgba(21,39,68,0.4); font-family: 'Mulish'; display: flex;">
+      <div style="width: 244px; flex-shrink: 0; background: #132239; background-image: url(&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='90' height='78'%3E%3Cpath d='M0 78 L45 0 L90 78' fill='none' stroke='%23ffffff' stroke-opacity='0.04' stroke-width='1'/%3E%3Cpath d='M-45 78 L0 0 L45 78' fill='none' stroke='%23ffffff' stroke-opacity='0.04' stroke-width='1'/%3E%3Cpath d='M45 78 L90 0 L135 78' fill='none' stroke='%23ffffff' stroke-opacity='0.04' stroke-width='1'/%3E%3C/svg%3E&quot;); display: flex; flex-direction: column; padding: 28px 0;">
+        <div style="padding: 0 26px 30px;">
+          <div style="font-family: 'Jost'; font-weight: 600; letter-spacing: 2px; font-size: 14px; color: #fff; text-transform: uppercase; line-height: 1.3;">Tanza<br><span style="color:#DE5A1C;">Fellowship</span></div>
+        </div>
+        <nav style="display: flex; flex-direction: column; gap: 2px; font-family: 'Jost'; font-weight: 500; font-size: 14px;">
+          <span style="padding: 12px 26px; color: #fff; background: rgba(222,90,28,0.16); border-left: 3px solid #DE5A1C; display: flex; align-items: center; gap: 12px;"><span style="color:#DE5A1C;">&#9673;</span> My journey</span>
+          <span style="padding: 12px 26px; color: #9FB0C8; display: flex; align-items: center; gap: 12px;"><span style="opacity:.7;">&#9673;</span> My coursework</span>
+        </nav>
+        <div style="margin-top: auto; padding: 0 26px;">
+          <div style="display: flex; align-items: center; gap: 10px; padding-top: 14px; border-top: 1px solid rgba(255,255,255,0.08);">
+            <div style="width: 32px; height: 32px; border-radius: 50%; background: #DE5A1C; color: #fff; font-family: 'Jost'; font-weight: 600; display: flex; align-items: center; justify-content: center; font-size: 13px;">EM</div>
+            <div style="font-size: 13px; color: #C9D4E2; line-height: 1.25;">Eugene Muthui<br><span style="color:#7C8DA6; font-size: 11px; cursor: pointer;">Log out</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div style="flex: 1;">
+        <div style="padding: 40px 48px 54px; max-width: 820px;">
+          <h1 style="font-family: 'Jost'; font-weight: 600; font-size: 34px; color: #152744; margin: 0 0 6px;">Your journey</h1>
+          <div style="font-family: 'Jost'; font-weight: 500; font-size: 12px; letter-spacing: 1.5px; text-transform: uppercase; color: #8A97AC; margin-bottom: 34px;">Cohort 1</div>
+
+          <!-- module: locked -->
+          <div style="background: #fff; border: 1px solid #E4E8EE; border-radius: 10px; overflow: hidden; margin-bottom: 22px;">
+            <div style="padding: 20px 24px; border-bottom: 1px solid #EEF1F4; display: flex; align-items: center; gap: 12px;">
+              <span style="font-family: 'Jost'; font-weight: 600; font-size: 18px; color: #152744;">Government Engagement</span>
+            </div>
+            <div style="padding: 18px 24px; display: flex; align-items: center; justify-content: space-between;">
+              <div>
+                <div style="font-size: 15px; font-weight: 600; color: #6C7A93;">Stakeholder mapping in district government</div>
+                <div style="font-size: 13px; color: #A0AABB; margin-top: 3px;">Not yet scheduled</div>
+              </div>
+              <span style="font-size: 11px; font-family: 'Jost'; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; color: #8A97AC; border: 1px solid #D6DBE3; background: #F7F8FA; padding: 6px 13px; border-radius: 20px;">Locked</span>
+            </div>
+          </div>
+
+          <!-- module: active -->
+          <div style="background: #fff; border: 1px solid #E4E8EE; border-radius: 10px; overflow: hidden;">
+            <div style="padding: 20px 24px; border-bottom: 1px solid #EEF1F4; display: flex; align-items: center; gap: 12px;">
+              <span style="font-family: 'Jost'; font-weight: 600; font-size: 18px; color: #152744;">QA Test Module</span>
+              <span style="font-size: 11px; font-family: 'Jost'; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; color: #DE5A1C; background: #FDEEE4; padding: 4px 10px; border-radius: 20px;">In progress</span>
+            </div>
+            <div style="padding: 18px 24px; display: flex; align-items: center; justify-content: space-between; border-left: 3px solid #DE5A1C;">
+              <div style="display: flex; align-items: center; gap: 12px;">
+                <span style="width:22px;height:22px;border-radius:50%;background:#DE5A1C;color:#fff;font-size:11px;font-family:'Jost';font-weight:600;display:flex;align-items:center;justify-content:center;">1</span>
+                <span style="font-size: 15px; font-weight: 600; color: #152744;">QA Test Class</span>
+              </div>
+              <button style="background: #DE5A1C; color: #fff; border: none; font-family: 'Jost'; font-weight: 600; font-size: 13px; padding: 10px 22px; border-radius: 6px; cursor: pointer;">Continue</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ 2C — MY COURSEWORK / YOUR DEVELOPMENT (updated) ============ -->
+  <div id="2c" style="display: flex; flex-direction: column; gap: 16px;">
+    <div style="display: flex; align-items: baseline; gap: 14px;">
+      <span style="background: #DE5A1C; color: #fff; font-family: 'Jost'; font-weight: 600; font-size: 15px; letter-spacing: 1px; padding: 6px 14px; border-radius: 4px;">2C</span>
+      <div>
+        <div style="font-family: 'Jost'; font-weight: 600; font-size: 20px; color: #152744;">My coursework — Your development <span style="font-family:'Mulish'; font-weight: 600; font-size: 11px; letter-spacing: 0.5px; text-transform: uppercase; color: #DE5A1C; background: #FDEEE4; padding: 3px 9px; border-radius: 20px; vertical-align: middle; margin-left: 4px;">Updated</span></div>
+        <div style="font-family: 'Mulish'; font-size: 13px; color: #5a6a82;">Aptitude scorecards, cohort-relative bands, strengths/focus tags, module progress, then the coursework list.</div>
+      </div>
+    </div>
+
+    <div style="width: 1180px; min-height: 1500px; background: #F4F6F9; border-radius: 8px; overflow: hidden; box-shadow: 0 30px 70px -30px rgba(21,39,68,0.4); font-family: 'Mulish'; display: flex;">
+      <div style="width: 244px; flex-shrink: 0; background: #132239; background-image: url(&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='90' height='78'%3E%3Cpath d='M0 78 L45 0 L90 78' fill='none' stroke='%23ffffff' stroke-opacity='0.04' stroke-width='1'/%3E%3Cpath d='M-45 78 L0 0 L45 78' fill='none' stroke='%23ffffff' stroke-opacity='0.04' stroke-width='1'/%3E%3Cpath d='M45 78 L90 0 L135 78' fill='none' stroke='%23ffffff' stroke-opacity='0.04' stroke-width='1'/%3E%3C/svg%3E&quot;); display: flex; flex-direction: column; padding: 28px 0;">
+        <div style="padding: 0 26px 30px;">
+          <div style="font-family: 'Jost'; font-weight: 600; letter-spacing: 2px; font-size: 14px; color: #fff; text-transform: uppercase; line-height: 1.3;">Tanza<br><span style="color:#DE5A1C;">Fellowship</span></div>
+        </div>
+        <nav style="display: flex; flex-direction: column; gap: 2px; font-family: 'Jost'; font-weight: 500; font-size: 14px;">
+          <span style="padding: 12px 26px; color: #9FB0C8; display: flex; align-items: center; gap: 12px;"><span style="opacity:.7;">&#9673;</span> My journey</span>
+          <span style="padding: 12px 26px; color: #fff; background: rgba(222,90,28,0.16); border-left: 3px solid #DE5A1C; display: flex; align-items: center; gap: 12px;"><span style="color:#DE5A1C;">&#9673;</span> My coursework</span>
+        </nav>
+        <div style="margin-top: auto; padding: 0 26px;">
+          <div style="display: flex; align-items: center; gap: 10px; padding-top: 14px; border-top: 1px solid rgba(255,255,255,0.08);">
+            <div style="width: 32px; height: 32px; border-radius: 50%; background: #DE5A1C; color: #fff; font-family: 'Jost'; font-weight: 600; display: flex; align-items: center; justify-content: center; font-size: 13px;">JL</div>
+            <div style="font-size: 13px; color: #C9D4E2; line-height: 1.25;">James Ludex<br><span style="color:#7C8DA6; font-size: 11px; cursor: pointer;">Log out</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div style="flex: 1;">
+        <div style="padding: 40px 48px 60px; max-width: 900px;">
+          <h1 style="font-family: 'Jost'; font-weight: 600; font-size: 34px; color: #152744; margin: 0 0 6px;">Your development</h1>
+          <div style="font-size: 14px; color: #6C7A93; margin-bottom: 28px;">Cohort 1 · QA Test Module — updated 7/9/2026</div>
+
+          <!-- aptitude scorecards -->
+          <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 24px;">
+            <div style="background: #fff; border: 1px solid #E4E8EE; border-radius: 10px; padding: 22px 24px;">
+              <div style="font-size: 13px; color: #8A97AC; margin-bottom: 14px;">Leadership</div>
+              <div style="font-family: 'Jost'; font-weight: 600; font-size: 36px; color: #152744; margin-bottom: 14px;">23</div>
+              <div style="display: flex; align-items: baseline; justify-content: space-between; font-size: 13px;">
+                <span style="color: #C44A2E; font-weight: 600;">&#8595; 80 vs Government Engagement</span>
+                <span style="color: #8A97AC; white-space: nowrap; margin-left: 10px;">· 2 signals</span>
+              </div>
+            </div>
+            <div style="background: #fff; border: 1px solid #E4E8EE; border-radius: 10px; padding: 22px 24px;">
+              <div style="font-size: 13px; color: #8A97AC; margin-bottom: 14px;">Strategic</div>
+              <div style="font-family: 'Jost'; font-weight: 600; font-size: 36px; color: #152744; margin-bottom: 14px;">94</div>
+              <div style="display: flex; align-items: baseline; justify-content: space-between; font-size: 13px;">
+                <span style="color: #2E7D53; font-weight: 600;">&#8593; 7.5 vs Government Engagement</span>
+                <span style="color: #8A97AC; white-space: nowrap; margin-left: 10px;">· 4 signals</span>
+              </div>
+            </div>
+            <div style="background: #fff; border: 1px solid #E4E8EE; border-radius: 10px; padding: 22px 24px;">
+              <div style="font-size: 13px; color: #8A97AC; margin-bottom: 14px;">Technical</div>
+              <div style="font-family: 'Jost'; font-weight: 600; font-size: 36px; color: #152744; margin-bottom: 14px;">100</div>
+              <div style="font-size: 13px; color: #8A97AC;">· 3 signals</div>
+            </div>
+          </div>
+
+          <!-- you and the cohort -->
+          <div style="background: #fff; border: 1px solid #E4E8EE; border-radius: 10px; padding: 26px 28px; margin-bottom: 24px;">
+            <div style="font-family: 'Jost'; font-weight: 600; font-size: 17px; color: #152744; margin-bottom: 4px;">You and the cohort</div>
+            <div style="font-size: 12.5px; color: #8A97AC; margin-bottom: 22px;">Shaded band = middle half of the cohort · dot = you (all-time)</div>
+
+            <div style="display: flex; flex-direction: column; gap: 22px;">
+              <div style="display: grid; grid-template-columns: 110px 1fr; align-items: center; gap: 18px;">
+                <span style="font-size: 14px; font-weight: 600; color: #3A4A66;">Leadership</span>
+                <div style="position: relative; height: 8px; border-radius: 4px; background: #ECEFF3;">
+                  <div style="position: absolute; left: 36%; width: 64%; top: 0; height: 100%; border-radius: 4px; background: #D3D9E1;"></div>
+                  <div style="position: absolute; left: 22%; top: 50%; width: 16px; height: 16px; border-radius: 50%; background: #152744; transform: translate(-50%, -50%); box-shadow: 0 0 0 3px #fff;"></div>
+                </div>
+              </div>
+              <div style="display: grid; grid-template-columns: 110px 1fr; align-items: center; gap: 18px;">
+                <span style="font-size: 14px; font-weight: 600; color: #3A4A66;">Strategic</span>
+                <div style="position: relative; height: 8px; border-radius: 4px; background: #ECEFF3;">
+                  <div style="position: absolute; left: 94%; top: 50%; width: 16px; height: 16px; border-radius: 50%; background: #152744; transform: translate(-50%, -50%); box-shadow: 0 0 0 3px #fff;"></div>
+                </div>
+              </div>
+              <div style="display: grid; grid-template-columns: 110px 1fr; align-items: center; gap: 18px;">
+                <span style="font-size: 14px; font-weight: 600; color: #3A4A66;">Technical</span>
+                <div style="position: relative; height: 8px; border-radius: 4px; background: #ECEFF3;">
+                  <div style="position: absolute; left: 100%; top: 50%; width: 16px; height: 16px; border-radius: 50%; background: #152744; transform: translate(-50%, -50%); box-shadow: 0 0 0 3px #fff;"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- strengths / focus next -->
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 30px;">
+            <div style="background: #fff; border: 1px solid #E4E8EE; border-radius: 10px; padding: 22px 24px;">
+              <div style="font-family: 'Jost'; font-weight: 600; font-size: 16px; color: #152744; margin-bottom: 16px;">Strengths</div>
+              <div style="display: flex; flex-wrap: wrap; gap: 10px;">
+                <span style="background: #152744; color: #fff; font-size: 13.5px; font-weight: 600; padding: 8px 16px; border-radius: 20px;">Public Communication</span>
+                <span style="background: #152744; color: #fff; font-size: 13.5px; font-weight: 600; padding: 8px 16px; border-radius: 20px;">Policy Analysis</span>
+              </div>
+            </div>
+            <div style="background: #fff; border: 1px solid #E4E8EE; border-radius: 10px; padding: 22px 24px;">
+              <div style="font-family: 'Jost'; font-weight: 600; font-size: 16px; color: #152744; margin-bottom: 16px;">Focus next</div>
+              <div style="display: flex; flex-wrap: wrap; gap: 10px;">
+                <span style="background: #fff; color: #3A4A66; border: 1px solid #D6DBE3; font-size: 13.5px; font-weight: 600; padding: 8px 16px; border-radius: 20px;">Stakeholder Mapping</span>
+                <span style="background: #fff; color: #3A4A66; border: 1px solid #D6DBE3; font-size: 13.5px; font-weight: 600; padding: 8px 16px; border-radius: 20px;">Community Consultation</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- module progress -->
+          <div style="margin-bottom: 34px;">
+            <div style="height: 8px; border-radius: 4px; background: #DE5A1C; margin-bottom: 12px;"></div>
+            <div style="font-size: 13.5px; color: #6C7A93;">2 of 2 classes · 1 assessment pending</div>
+          </div>
+
+          <h2 style="font-family: 'Jost'; font-weight: 600; font-size: 24px; color: #152744; margin: 0 0 16px;">Your coursework</h2>
+          <div style="display: flex; flex-direction: column; gap: 14px;">
+            <!-- result row 1 -->
+            <div style="background: #fff; border: 1px solid #E4E8EE; border-radius: 10px; padding: 20px 24px; display: flex; align-items: center; justify-content: space-between; gap: 16px;">
+              <div>
+                <div style="font-family: 'Jost'; font-weight: 600; font-size: 16px; color: #152744;">Untitled assessment</div>
+                <div style="font-size: 13px; color: #8A97AC; margin-top: 4px;">Government Engagement · Stakeholder mapping in district government · Submitted 7/9/2026</div>
+              </div>
+              <div style="display: flex; align-items: center; gap: 16px; flex-shrink: 0;">
+                <span style="font-size: 11px; font-family: 'Jost'; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; color: #fff; background: #152744; padding: 6px 12px; border-radius: 20px;">Graded</span>
+                <span style="font-family: 'Jost'; font-weight: 600; font-size: 15px; color: #152744; white-space: nowrap;">28/30 pts</span>
+                <button style="background: #fff; color: #152744; border: 1px solid #152744; font-family: 'Jost'; font-weight: 600; font-size: 13px; padding: 9px 20px; border-radius: 6px; cursor: pointer;">View</button>
+              </div>
+            </div>
+            <!-- result row 2 -->
+            <div style="background: #fff; border: 1px solid #E4E8EE; border-radius: 10px; padding: 20px 24px; display: flex; align-items: center; justify-content: space-between; gap: 16px;">
+              <div>
+                <div style="font-family: 'Jost'; font-weight: 600; font-size: 16px; color: #152744;">Untitled assessment</div>
+                <div style="font-size: 13px; color: #8A97AC; margin-top: 4px;">QA Test Module · QA Test Class · Submitted 7/9/2026</div>
+              </div>
+              <div style="display: flex; align-items: center; gap: 16px; flex-shrink: 0;">
+                <span style="font-size: 11px; font-family: 'Jost'; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; color: #fff; background: #152744; padding: 6px 12px; border-radius: 20px;">Graded</span>
+                <span style="font-family: 'Jost'; font-weight: 600; font-size: 15px; color: #152744; white-space: nowrap;">20/30 pts</span>
+                <button style="background: #fff; color: #152744; border: 1px solid #152744; font-family: 'Jost'; font-weight: 600; font-size: 13px; padding: 9px 20px; border-radius: 6px; cursor: pointer;">View</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ 2D — ASSESSMENT RESULTS ============ -->
+  <div id="2d" style="display: flex; flex-direction: column; gap: 16px;">
+    <div style="display: flex; align-items: baseline; gap: 14px;">
+      <span style="background: #DE5A1C; color: #fff; font-family: 'Jost'; font-weight: 600; font-size: 15px; letter-spacing: 1px; padding: 6px 14px; border-radius: 4px;">2D</span>
+      <div style="font-family: 'Jost'; font-weight: 600; font-size: 20px; color: #152744;">Assessment results</div>
+    </div>
+
+    <div style="width: 1180px; min-height: 820px; background: #F4F6F9; border-radius: 8px; overflow: hidden; box-shadow: 0 30px 70px -30px rgba(21,39,68,0.4); font-family: 'Mulish'; display: flex;">
+      <div style="width: 244px; flex-shrink: 0; background: #132239; background-image: url(&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='90' height='78'%3E%3Cpath d='M0 78 L45 0 L90 78' fill='none' stroke='%23ffffff' stroke-opacity='0.04' stroke-width='1'/%3E%3Cpath d='M-45 78 L0 0 L45 78' fill='none' stroke='%23ffffff' stroke-opacity='0.04' stroke-width='1'/%3E%3Cpath d='M45 78 L90 0 L135 78' fill='none' stroke='%23ffffff' stroke-opacity='0.04' stroke-width='1'/%3E%3C/svg%3E&quot;); display: flex; flex-direction: column; padding: 28px 0;">
+        <div style="padding: 0 26px 30px;">
+          <div style="font-family: 'Jost'; font-weight: 600; letter-spacing: 2px; font-size: 14px; color: #fff; text-transform: uppercase; line-height: 1.3;">Tanza<br><span style="color:#DE5A1C;">Fellowship</span></div>
+        </div>
+        <nav style="display: flex; flex-direction: column; gap: 2px; font-family: 'Jost'; font-weight: 500; font-size: 14px;">
+          <span style="padding: 12px 26px; color: #9FB0C8; display: flex; align-items: center; gap: 12px;"><span style="opacity:.7;">&#9673;</span> My journey</span>
+          <span style="padding: 12px 26px; color: #fff; background: rgba(222,90,28,0.16); border-left: 3px solid #DE5A1C; display: flex; align-items: center; gap: 12px;"><span style="color:#DE5A1C;">&#9673;</span> My coursework</span>
+        </nav>
+        <div style="margin: 22px 26px; height: 1px; background: rgba(255,255,255,0.08);"></div>
+        <div style="padding: 0 26px;">
+          <div style="font-family: 'Jost'; font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; color: #5E708C; margin-bottom: 14px;">QA Test Module</div>
+          <span style="font-size: 13px; color: #C9D4E2; display: flex; align-items: center; gap: 10px;"><span style="width:18px;height:18px;border-radius:50%;background:rgba(255,255,255,0.12);color:#C9D4E2;font-size:10px;display:flex;align-items:center;justify-content:center;">1</span> QA Test Class</span>
+        </div>
+        <div style="margin-top: auto; padding: 0 26px;">
+          <div style="display: flex; align-items: center; gap: 10px; padding-top: 14px; border-top: 1px solid rgba(255,255,255,0.08);">
+            <div style="width: 32px; height: 32px; border-radius: 50%; background: #DE5A1C; color: #fff; font-family: 'Jost'; font-weight: 600; display: flex; align-items: center; justify-content: center; font-size: 13px;">EM</div>
+            <div style="font-size: 13px; color: #C9D4E2; line-height: 1.25;">Eugene Muthui<br><span style="color:#7C8DA6; font-size: 11px; cursor: pointer;">Log out</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div style="flex: 1;">
+        <div style="padding: 34px 48px 54px; max-width: 780px;">
+          <div style="font-family: 'Jost'; font-weight: 500; font-size: 12px; letter-spacing: 1.5px; text-transform: uppercase; color: #8A97AC; margin-bottom: 8px;">QA Test Module · QA Test Class</div>
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 26px;">
+            <h1 style="font-family: 'Jost'; font-weight: 600; font-size: 32px; color: #152744; margin: 0;">Untitled assessment</h1>
+            <button style="background: #fff; color: #152744; border: 1px solid #D6DBE3; font-family: 'Jost'; font-weight: 600; font-size: 13px; padding: 9px 18px; border-radius: 6px; cursor: pointer;">← Back to class</button>
+          </div>
+
+          <!-- summary strip -->
+          <div style="background: #fff; border: 1px solid #E4E8EE; border-left: 3px solid #DE5A1C; border-radius: 8px; padding: 20px 24px; margin-bottom: 22px;">
+            <div style="font-family: 'Jost'; font-weight: 600; font-size: 17px; color: #152744;">0/20 points so far <span style="color:#8A97AC; font-weight: 500; font-size: 15px;">· 1 question awaiting grading</span></div>
+            <div style="font-size: 13px; color: #8A97AC; margin-top: 5px;">Submitted 08/07/2026, 18:22:53</div>
+          </div>
+
+          <!-- Q1 -->
+          <div style="background: #fff; border: 1px solid #E4E8EE; border-radius: 10px; padding: 24px 26px; margin-bottom: 16px;">
+            <div style="font-family: 'Jost'; font-weight: 600; font-size: 15px; color: #DE5A1C; letter-spacing: 0.5px; margin-bottom: 12px;">Q1</div>
+            <p style="font-size: 15.5px; line-height: 1.7; color: #3A4A66; margin: 0 0 16px;">Juma works for an NGO in the education sector called MasomoBora. He wants to visit a school in Arusha to learn about the school schedule and their extra-curricular activities policy. What is the best way to go about this?</p>
+            <div style="background: #F4F6F9; border: 1px solid #E4E8EE; border-radius: 6px; padding: 13px 16px; font-size: 15px; color: #2B3A55;">Lorem Ipsum</div>
+            <div style="margin-top: 14px;"><span style="font-size: 11px; font-family: 'Jost'; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; color: #B26A1B; background: #FBEFD8; padding: 5px 11px; border-radius: 20px;">Awaiting grading</span></div>
+          </div>
+
+          <!-- Q2 -->
+          <div style="background: #fff; border: 1px solid #E4E8EE; border-radius: 10px; padding: 24px 26px;">
+            <div style="font-family: 'Jost'; font-weight: 600; font-size: 15px; color: #DE5A1C; letter-spacing: 0.5px; margin-bottom: 12px;">Q2</div>
+            <p style="font-size: 15.5px; line-height: 1.7; color: #152744; font-weight: 600; margin: 0 0 16px;">What does Tanza do?</p>
+            <div style="display: flex; flex-direction: column; gap: 10px;">
+              <div style="border: 1px solid #E4E8EE; border-radius: 8px; padding: 13px 16px; font-size: 14.5px; color: #3A4A66; background: #fff;">Run farming educational programs</div>
+              <div style="border: 1px solid #B7DEC4; border-radius: 8px; padding: 13px 16px; font-size: 14.5px; color: #1E5A38; background: #EDF7F0; display: flex; align-items: center; gap: 12px;">
+                <span style="width:20px;height:20px;border-radius:50%;background:#2E7D53;color:#fff;font-size:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">&#10003;</span>
+                <span>Run a leadership and entrepreneurial fellowship program for stakeholders in the education space</span>
+              </div>
+              <div style="border: 1px solid #E7B9B0; border-radius: 8px; padding: 13px 16px; font-size: 14.5px; color: #8A3320; background: #FBEEEB; display: flex; align-items: center; justify-content: space-between; gap: 12px;">
+                <div style="display: flex; align-items: center; gap: 12px;">
+                  <span style="width:20px;height:20px;border-radius:50%;background:#C44A2E;color:#fff;font-size:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">&#10005;</span>
+                  <span>Manage education across the country on behalf of the government.</span>
+                </div>
+                <span style="font-family: 'Jost'; font-weight: 600; font-size: 11px; letter-spacing: 0.5px; text-transform: uppercase; color: #C44A2E; white-space: nowrap;">Your answer</span>
+              </div>
+            </div>
+            <div style="margin-top: 16px; font-family: 'Jost'; font-weight: 600; font-size: 14px; color: #6C7A93;">0/20 points</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ 3A — ADMIN: COHORT OVERVIEW ============ -->
+  <div id="3a" style="display: flex; flex-direction: column; gap: 16px;">
+    <div style="display: flex; align-items: baseline; gap: 14px;">
+      <span style="background: #152744; color: #fff; font-family: 'Jost'; font-weight: 600; font-size: 15px; letter-spacing: 1px; padding: 6px 14px; border-radius: 4px;">3A</span>
+      <div>
+        <div style="font-family: 'Jost'; font-weight: 600; font-size: 20px; color: #152744;">Admin — Cohort overview <span style="font-family:'Mulish'; font-weight: 600; font-size: 11px; letter-spacing: 0.5px; text-transform: uppercase; color: #fff; background: #DE5A1C; padding: 3px 9px; border-radius: 20px; vertical-align: middle; margin-left: 4px;">Updated</span></div>
+        <div style="font-family: 'Mulish'; font-size: 13px; color: #5a6a82;">Full-width stacked sections so Attention and Capability gaps each scale independently — no truncated labels, no lopsided whitespace as data grows.</div>
+      </div>
+    </div>
+
+    <div style="width: 1280px; min-height: 760px; background: #F4F6F9; border-radius: 8px; overflow: hidden; box-shadow: 0 30px 70px -30px rgba(21,39,68,0.4); font-family: 'Mulish'; display: flex;">
+      <!-- ADMIN SIDEBAR -->
+      <div style="width: 244px; flex-shrink: 0; background: #132239; background-image: url(&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='90' height='78'%3E%3Cpath d='M0 78 L45 0 L90 78' fill='none' stroke='%23ffffff' stroke-opacity='0.04' stroke-width='1'/%3E%3Cpath d='M-45 78 L0 0 L45 78' fill='none' stroke='%23ffffff' stroke-opacity='0.04' stroke-width='1'/%3E%3Cpath d='M45 78 L90 0 L135 78' fill='none' stroke='%23ffffff' stroke-opacity='0.04' stroke-width='1'/%3E%3C/svg%3E&quot;); display: flex; flex-direction: column; padding: 28px 0;">
+        <div style="padding: 0 26px 4px;">
+          <div style="font-family: 'Jost'; font-weight: 600; letter-spacing: 2px; font-size: 14px; color: #fff; text-transform: uppercase; line-height: 1.3;">Tanza<br><span style="color:#DE5A1C;">Fellowship</span></div>
+        </div>
+        <div style="padding: 0 26px 26px; font-family: 'Jost'; font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: #7C8DA6;">Admin</div>
+        <nav style="display: flex; flex-direction: column; gap: 2px; font-family: 'Jost'; font-weight: 500; font-size: 14px;">
+          <span style="padding: 12px 26px; color: #9FB0C8; display: flex; align-items: center; gap: 12px;"><span style="opacity:.7;">&#9673;</span> Curriculum</span>
+          <span style="padding: 12px 26px; color: #fff; background: rgba(222,90,28,0.16); border-left: 3px solid #DE5A1C; display: flex; align-items: center; gap: 12px;"><span style="color:#DE5A1C;">&#9673;</span> Cohorts</span>
+          <span style="padding: 12px 26px; color: #9FB0C8; display: flex; align-items: center; gap: 12px;"><span style="opacity:.7;">&#9673;</span> Grading</span>
+        </nav>
+        <div style="margin-top: auto; padding: 0 26px;">
+          <div style="padding-top: 14px; border-top: 1px solid rgba(255,255,255,0.08);">
+            <span style="color: #7C8DA6; font-size: 13px; cursor: pointer;">Log out</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- MAIN -->
+      <div style="flex: 1;">
+        <div style="padding: 40px 48px 54px; max-width: 900px;">
+          <h1 style="font-family: 'Jost'; font-weight: 600; font-size: 34px; color: #152744; margin: 0 0 6px;">Cohort 1</h1>
+          <div style="font-size: 14px; color: #6C7A93; margin-bottom: 28px;">7 fellows</div>
+
+          <!-- stat cards -->
+          <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 34px;">
+            <div style="background: #fff; border: 1px solid #E4E8EE; border-radius: 10px; padding: 20px 22px;">
+              <div style="font-size: 13px; color: #8A97AC; margin-bottom: 12px;">Needs support</div>
+              <div style="font-family: 'Jost'; font-weight: 600; font-size: 30px; color: #C44A2E;">1</div>
+            </div>
+            <div style="background: #fff; border: 1px solid #E4E8EE; border-radius: 10px; padding: 20px 22px;">
+              <div style="font-size: 13px; color: #8A97AC; margin-bottom: 12px;">Exceptional</div>
+              <div style="font-family: 'Jost'; font-weight: 600; font-size: 30px; color: #2E7D53;">1</div>
+            </div>
+            <div style="background: #fff; border: 1px solid #E4E8EE; border-radius: 10px; padding: 20px 22px;">
+              <div style="font-size: 13px; color: #8A97AC; margin-bottom: 12px;">Median score</div>
+              <div style="font-family: 'Jost'; font-weight: 600; font-size: 30px; color: #152744;">56</div>
+            </div>
+            <div style="background: #fff; border: 1px solid #E4E8EE; border-radius: 10px; padding: 20px 22px;">
+              <div style="font-size: 13px; color: #8A97AC; margin-bottom: 12px;">Signals this week</div>
+              <div style="font-family: 'Jost'; font-weight: 600; font-size: 30px; color: #152744;">9</div>
+            </div>
+          </div>
+
+          <!-- attention: full-width grid of alert cards, wraps as more fellows are flagged -->
+          <div style="margin-bottom: 34px;">
+            <div style="font-family: 'Jost'; font-weight: 600; font-size: 18px; color: #152744; margin-bottom: 14px;">Attention</div>
+            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 14px;">
+              <div style="background: #fff; border: 1px solid #E4E8EE; border-radius: 10px; padding: 16px 18px; display: flex; align-items: center; gap: 14px;">
+                <div style="width: 38px; height: 38px; border-radius: 50%; background: #FBEEEB; color: #8A3320; font-family: 'Jost'; font-weight: 600; font-size: 13px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">AJ</div>
+                <div style="flex: 1; min-width: 0;">
+                  <div style="font-family: 'Jost'; font-weight: 600; font-size: 15px; color: #152744;">Amina Juma</div>
+                  <div style="font-size: 13px; color: #C44A2E; margin-top: 2px;">Technical 24 · 7 signals</div>
+                </div>
+                <button style="background: #fff; color: #152744; border: 1px solid #D6DBE3; font-family: 'Jost'; font-weight: 600; font-size: 12.5px; padding: 7px 14px; border-radius: 6px; cursor: pointer; flex-shrink: 0;">View</button>
+              </div>
+              <div style="background: #fff; border: 1px solid #E4E8EE; border-radius: 10px; padding: 16px 18px; display: flex; align-items: center; gap: 14px;">
+                <div style="width: 38px; height: 38px; border-radius: 50%; background: #EDF7F0; color: #1E5A38; font-family: 'Jost'; font-weight: 600; font-size: 13px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">GK</div>
+                <div style="flex: 1; min-width: 0;">
+                  <div style="font-family: 'Jost'; font-weight: 600; font-size: 15px; color: #152744;">Grace Kimaro</div>
+                  <div style="font-size: 13px; color: #2E7D53; margin-top: 2px;">Technical 98 · 7 signals</div>
+                </div>
+                <button style="background: #fff; color: #152744; border: 1px solid #D6DBE3; font-family: 'Jost'; font-weight: 600; font-size: 12.5px; padding: 7px 14px; border-radius: 6px; cursor: pointer; flex-shrink: 0;">View</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- capability gaps: full width, so labels never truncate as more skills are tracked -->
+          <div>
+            <div style="font-family: 'Jost'; font-weight: 600; font-size: 18px; color: #152744; margin-bottom: 14px;">Cohort capability gaps</div>
+            <div style="background: #fff; border: 1px solid #E4E8EE; border-radius: 10px; padding: 22px 26px; display: flex; flex-direction: column; gap: 18px;">
+              <div style="display: grid; grid-template-columns: 220px 1fr 34px; align-items: center; gap: 18px;">
+                <span style="font-size: 14px; color: #3A4A66; font-weight: 600;">Regulatory Navigation</span>
+                <div style="height: 6px; border-radius: 3px; background: #ECEFF3; overflow: hidden;"><div style="width: 25%; height: 100%; background: #C44A2E;"></div></div>
+                <span style="font-size: 13px; color: #6C7A93; text-align: right;">25</span>
+              </div>
+              <div style="display: grid; grid-template-columns: 220px 1fr 34px; align-items: center; gap: 18px;">
+                <span style="font-size: 14px; color: #3A4A66; font-weight: 600;">Stakeholder Mapping</span>
+                <div style="height: 6px; border-radius: 3px; background: #ECEFF3; overflow: hidden;"><div style="width: 54%; height: 100%; background: #DE5A1C;"></div></div>
+                <span style="font-size: 13px; color: #6C7A93; text-align: right;">54</span>
+              </div>
+              <div style="display: grid; grid-template-columns: 220px 1fr 34px; align-items: center; gap: 18px;">
+                <span style="font-size: 14px; color: #3A4A66; font-weight: 600;">Coalition Building</span>
+                <div style="height: 6px; border-radius: 3px; background: #ECEFF3; overflow: hidden;"><div style="width: 64%; height: 100%; background: #DE5A1C;"></div></div>
+                <span style="font-size: 13px; color: #6C7A93; text-align: right;">64</span>
+              </div>
+              <div style="display: grid; grid-template-columns: 220px 1fr 34px; align-items: center; gap: 18px;">
+                <span style="font-size: 14px; color: #3A4A66; font-weight: 600;">Public Communication</span>
+                <div style="height: 6px; border-radius: 3px; background: #ECEFF3; overflow: hidden;"><div style="width: 68%; height: 100%; background: #DE5A1C;"></div></div>
+                <span style="font-size: 13px; color: #6C7A93; text-align: right;">68</span>
+              </div>
+              <div style="display: grid; grid-template-columns: 220px 1fr 34px; align-items: center; gap: 18px;">
+                <span style="font-size: 14px; color: #3A4A66; font-weight: 600;">Community Consultation</span>
+                <div style="height: 6px; border-radius: 3px; background: #ECEFF3; overflow: hidden;"><div style="width: 72%; height: 100%; background: #DE5A1C;"></div></div>
+                <span style="font-size: 13px; color: #6C7A93; text-align: right;">72</span>
+              </div>
+              <div style="display: grid; grid-template-columns: 220px 1fr 34px; align-items: center; gap: 18px;">
+                <span style="font-size: 14px; color: #3A4A66; font-weight: 600;">Policy Analysis</span>
+                <div style="height: 6px; border-radius: 3px; background: #ECEFF3; overflow: hidden;"><div style="width: 100%; height: 100%; background: #DE5A1C;"></div></div>
+                <span style="font-size: 13px; color: #6C7A93; text-align: right;">100</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ 3B — ADMIN: COHORTS ============ -->
+  <div id="3b" style="display: flex; flex-direction: column; gap: 16px;">
+    <div style="display: flex; align-items: baseline; gap: 14px;">
+      <span style="background: #152744; color: #fff; font-family: 'Jost'; font-weight: 600; font-size: 15px; letter-spacing: 1px; padding: 6px 14px; border-radius: 4px;">3B</span>
+      <div>
+        <div style="font-family: 'Jost'; font-weight: 600; font-size: 20px; color: #152744;">Admin — Cohorts <span style="font-family:'Mulish'; font-weight: 600; font-size: 11px; letter-spacing: 0.5px; text-transform: uppercase; color: #152744; background: #EEF1F4; padding: 3px 9px; border-radius: 20px; vertical-align: middle; margin-left: 4px;">New</span></div>
+        <div style="font-family: 'Mulish'; font-size: 13px; color: #5a6a82;">Cohort roster cards with fellow tables and reassignment controls.</div>
+      </div>
+    </div>
+
+    <div style="width: 1280px; min-height: 820px; background: #F4F6F9; border-radius: 8px; overflow: hidden; box-shadow: 0 30px 70px -30px rgba(21,39,68,0.4); font-family: 'Mulish'; display: flex;">
+      <div style="width: 244px; flex-shrink: 0; background: #132239; background-image: url(&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='90' height='78'%3E%3Cpath d='M0 78 L45 0 L90 78' fill='none' stroke='%23ffffff' stroke-opacity='0.04' stroke-width='1'/%3E%3Cpath d='M-45 78 L0 0 L45 78' fill='none' stroke='%23ffffff' stroke-opacity='0.04' stroke-width='1'/%3E%3Cpath d='M45 78 L90 0 L135 78' fill='none' stroke='%23ffffff' stroke-opacity='0.04' stroke-width='1'/%3E%3C/svg%3E&quot;); display: flex; flex-direction: column; padding: 28px 0;">
+        <div style="padding: 0 26px 4px;">
+          <div style="font-family: 'Jost'; font-weight: 600; letter-spacing: 2px; font-size: 14px; color: #fff; text-transform: uppercase; line-height: 1.3;">Tanza<br><span style="color:#DE5A1C;">Fellowship</span></div>
+        </div>
+        <div style="padding: 0 26px 26px; font-family: 'Jost'; font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: #7C8DA6;">Admin</div>
+        <nav style="display: flex; flex-direction: column; gap: 2px; font-family: 'Jost'; font-weight: 500; font-size: 14px;">
+          <span style="padding: 12px 26px; color: #9FB0C8; display: flex; align-items: center; gap: 12px;"><span style="opacity:.7;">&#9673;</span> Curriculum</span>
+          <span style="padding: 12px 26px; color: #fff; background: rgba(222,90,28,0.16); border-left: 3px solid #DE5A1C; display: flex; align-items: center; gap: 12px;"><span style="color:#DE5A1C;">&#9673;</span> Cohorts</span>
+          <span style="padding: 12px 26px; color: #9FB0C8; display: flex; align-items: center; gap: 12px;"><span style="opacity:.7;">&#9673;</span> Grading</span>
+        </nav>
+        <div style="margin-top: auto; padding: 0 26px;">
+          <div style="padding-top: 14px; border-top: 1px solid rgba(255,255,255,0.08);">
+            <span style="color: #7C8DA6; font-size: 13px; cursor: pointer;">Log out</span>
+          </div>
+        </div>
+      </div>
+
+      <div style="flex: 1;">
+        <div style="padding: 40px 48px 54px;">
+          <h1 style="font-family: 'Jost'; font-weight: 600; font-size: 34px; color: #152744; margin: 0 0 28px;">Cohorts</h1>
+
+          <div style="display: flex; flex-direction: column; gap: 24px;">
+            <!-- Cohort 1 -->
+            <div style="background: #fff; border: 1px solid #E4E8EE; border-radius: 10px; overflow: hidden;">
+              <div style="padding: 20px 26px; border-bottom: 1px solid #EEF1F4;">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                  <span style="font-family: 'Jost'; font-weight: 600; font-size: 19px; color: #152744;">Cohort 1</span>
+                  <span style="font-size: 11px; font-family: 'Jost'; font-weight: 600; letter-spacing: 0.5px; text-transform: uppercase; color: #6C7A93; background: #EEF1F4; padding: 4px 11px; border-radius: 20px;">active</span>
+                </div>
+                <div style="font-size: 13px; color: #8A97AC; margin-top: 6px;">Starts 2026-09-07 · enrolment window 2026-01-01 – 2026-09-07 · 4 fellows</div>
+              </div>
+
+              <div style="display: grid; grid-template-columns: 220px 280px 130px 1fr; padding: 12px 26px; font-family: 'Jost'; font-weight: 600; font-size: 11px; letter-spacing: 1px; text-transform: uppercase; color: #8A97AC; border-bottom: 1px solid #EEF1F4;">
+                <span>Name</span><span>Email</span><span>Assigned by</span><span style="text-align: right;">Move to</span>
+              </div>
+              <div style="display: grid; grid-template-columns: 220px 280px 130px 1fr; align-items: center; padding: 16px 26px; border-bottom: 1px solid #EEF1F4;">
+                <span style="font-size: 14.5px; font-weight: 600; color: #152744;">Eugene Muthui</span>
+                <span style="font-size: 14px; color: #6C7A93;">jmuthui70@gmail.com</span>
+                <span style="font-size: 12px; color: #8A97AC; border: 1px solid #D6DBE3; padding: 4px 10px; border-radius: 20px; width: fit-content;">system</span>
+                <div style="display: flex; align-items: center; justify-content: flex-end; gap: 10px;">
+                  <span style="border: 1px solid #D6DBE3; border-radius: 6px; padding: 8px 14px; font-size: 13.5px; color: #8A97AC; min-width: 150px; display: flex; align-items: center; justify-content: space-between;">Choose cohort <span style="font-size: 10px;">&#9662;</span></span>
+                  <span style="border: 1px solid #D6DBE3; border-radius: 6px; padding: 8px 16px; font-family: 'Jost'; font-weight: 600; font-size: 13px; color: #B7BFCB; background: #F7F8FA;">Reassign</span>
+                </div>
+              </div>
+              <div style="display: grid; grid-template-columns: 220px 280px 130px 1fr; align-items: center; padding: 16px 26px; border-bottom: 1px solid #EEF1F4;">
+                <span style="font-size: 14.5px; font-weight: 600; color: #152744;">James Ludex</span>
+                <span style="font-size: 14px; color: #6C7A93;">jludex@gmail.com</span>
+                <span style="font-size: 12px; color: #8A97AC; border: 1px solid #D6DBE3; padding: 4px 10px; border-radius: 20px; width: fit-content;">system</span>
+                <div style="display: flex; align-items: center; justify-content: flex-end; gap: 10px;">
+                  <span style="border: 1px solid #D6DBE3; border-radius: 6px; padding: 8px 14px; font-size: 13.5px; color: #8A97AC; min-width: 150px; display: flex; align-items: center; justify-content: space-between;">Choose cohort <span style="font-size: 10px;">&#9662;</span></span>
+                  <span style="border: 1px solid #D6DBE3; border-radius: 6px; padding: 8px 16px; font-family: 'Jost'; font-weight: 600; font-size: 13px; color: #B7BFCB; background: #F7F8FA;">Reassign</span>
+                </div>
+              </div>
+              <div style="display: grid; grid-template-columns: 220px 280px 130px 1fr; align-items: center; padding: 16px 26px; border-bottom: 1px solid #EEF1F4;">
+                <span style="font-size: 14.5px; font-weight: 600; color: #152744;">Joe Muthui</span>
+                <span style="font-size: 14px; color: #6C7A93;">joemuthui@rocketmail.com</span>
+                <span style="font-size: 12px; color: #8A97AC; border: 1px solid #D6DBE3; padding: 4px 10px; border-radius: 20px; width: fit-content;">system</span>
+                <div style="display: flex; align-items: center; justify-content: flex-end; gap: 10px;">
+                  <span style="border: 1px solid #D6DBE3; border-radius: 6px; padding: 8px 14px; font-size: 13.5px; color: #8A97AC; min-width: 150px; display: flex; align-items: center; justify-content: space-between;">Choose cohort <span style="font-size: 10px;">&#9662;</span></span>
+                  <span style="border: 1px solid #D6DBE3; border-radius: 6px; padding: 8px 16px; font-family: 'Jost'; font-weight: 600; font-size: 13px; color: #B7BFCB; background: #F7F8FA;">Reassign</span>
+                </div>
+              </div>
+              <div style="display: grid; grid-template-columns: 220px 280px 130px 1fr; align-items: center; padding: 16px 26px;">
+                <span style="font-size: 14.5px; font-weight: 600; color: #152744;">Stage3 Test Fellow</span>
+                <span style="font-size: 14px; color: #6C7A93;">stage3-fellow@example.com</span>
+                <span style="font-size: 12px; color: #8A97AC; border: 1px solid #D6DBE3; padding: 4px 10px; border-radius: 20px; width: fit-content;">system</span>
+                <div style="display: flex; align-items: center; justify-content: flex-end; gap: 10px;">
+                  <span style="border: 1px solid #D6DBE3; border-radius: 6px; padding: 8px 14px; font-size: 13.5px; color: #8A97AC; min-width: 150px; display: flex; align-items: center; justify-content: space-between;">Choose cohort <span style="font-size: 10px;">&#9662;</span></span>
+                  <span style="border: 1px solid #D6DBE3; border-radius: 6px; padding: 8px 16px; font-family: 'Jost'; font-weight: 600; font-size: 13px; color: #B7BFCB; background: #F7F8FA;">Reassign</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Cohort 2 -->
+            <div style="background: #fff; border: 1px solid #E4E8EE; border-radius: 10px; overflow: hidden;">
+              <div style="padding: 20px 26px; border-bottom: 1px solid #EEF1F4;">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                  <span style="font-family: 'Jost'; font-weight: 600; font-size: 19px; color: #152744;">Cohort 2 (test)</span>
+                  <span style="font-size: 11px; font-family: 'Jost'; font-weight: 600; letter-spacing: 0.5px; text-transform: uppercase; color: #6C7A93; background: #EEF1F4; padding: 4px 11px; border-radius: 20px;">active</span>
+                </div>
+                <div style="font-size: 13px; color: #8A97AC; margin-top: 6px;">Starts 2026-09-07 · enrolment window 2026-01-01 – 2026-09-07 · 1 fellow</div>
+              </div>
+
+              <div style="display: grid; grid-template-columns: 220px 280px 130px 1fr; padding: 12px 26px; font-family: 'Jost'; font-weight: 600; font-size: 11px; letter-spacing: 1px; text-transform: uppercase; color: #8A97AC; border-bottom: 1px solid #EEF1F4;">
+                <span>Name</span><span>Email</span><span>Assigned by</span><span style="text-align: right;">Move to</span>
+              </div>
+              <div style="display: grid; grid-template-columns: 220px 280px 130px 1fr; align-items: center; padding: 16px 26px;">
+                <span style="font-size: 14.5px; font-weight: 600; color: #152744;">Stage3 Cohort2 Fellow</span>
+                <span style="font-size: 14px; color: #6C7A93;">stage3-fellow-cohort2@example.com</span>
+                <span style="font-size: 12px; color: #8A97AC; border: 1px solid #D6DBE3; padding: 4px 10px; border-radius: 20px; width: fit-content;">system</span>
+                <div style="display: flex; align-items: center; justify-content: flex-end; gap: 10px;">
+                  <span style="border: 1px solid #D6DBE3; border-radius: 6px; padding: 8px 14px; font-size: 13.5px; color: #8A97AC; min-width: 150px; display: flex; align-items: center; justify-content: space-between;">Choose cohort <span style="font-size: 10px;">&#9662;</span></span>
+                  <span style="border: 1px solid #D6DBE3; border-radius: 6px; padding: 8px 16px; font-family: 'Jost'; font-weight: 600; font-size: 13px; color: #B7BFCB; background: #F7F8FA;">Reassign</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ 3C — ADMIN: GRADING QUEUE ============ -->
+  <div id="3c" style="display: flex; flex-direction: column; gap: 16px;">
+    <div style="display: flex; align-items: baseline; gap: 14px;">
+      <span style="background: #152744; color: #fff; font-family: 'Jost'; font-weight: 600; font-size: 15px; letter-spacing: 1px; padding: 6px 14px; border-radius: 4px;">3C</span>
+      <div>
+        <div style="font-family: 'Jost'; font-weight: 600; font-size: 20px; color: #152744;">Admin — Grading queue <span style="font-family:'Mulish'; font-weight: 600; font-size: 11px; letter-spacing: 0.5px; text-transform: uppercase; color: #152744; background: #EEF1F4; padding: 3px 9px; border-radius: 20px; vertical-align: middle; margin-left: 4px;">New</span></div>
+        <div style="font-family: 'Mulish'; font-size: 13px; color: #5a6a82;">Ungraded responses across the cohort, one row per attempt.</div>
+      </div>
+    </div>
+
+    <div style="width: 1280px; min-height: 900px; background: #F4F6F9; border-radius: 8px; overflow: hidden; box-shadow: 0 30px 70px -30px rgba(21,39,68,0.4); font-family: 'Mulish'; display: flex;">
+      <div style="width: 244px; flex-shrink: 0; background: #132239; background-image: url(&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='90' height='78'%3E%3Cpath d='M0 78 L45 0 L90 78' fill='none' stroke='%23ffffff' stroke-opacity='0.04' stroke-width='1'/%3E%3Cpath d='M-45 78 L0 0 L45 78' fill='none' stroke='%23ffffff' stroke-opacity='0.04' stroke-width='1'/%3E%3Cpath d='M45 78 L90 0 L135 78' fill='none' stroke='%23ffffff' stroke-opacity='0.04' stroke-width='1'/%3E%3C/svg%3E&quot;); display: flex; flex-direction: column; padding: 28px 0;">
+        <div style="padding: 0 26px 4px;">
+          <div style="font-family: 'Jost'; font-weight: 600; letter-spacing: 2px; font-size: 14px; color: #fff; text-transform: uppercase; line-height: 1.3;">Tanza<br><span style="color:#DE5A1C;">Fellowship</span></div>
+        </div>
+        <div style="padding: 0 26px 26px; font-family: 'Jost'; font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: #7C8DA6;">Admin</div>
+        <nav style="display: flex; flex-direction: column; gap: 2px; font-family: 'Jost'; font-weight: 500; font-size: 14px;">
+          <span style="padding: 12px 26px; color: #9FB0C8; display: flex; align-items: center; gap: 12px;"><span style="opacity:.7;">&#9673;</span> Curriculum</span>
+          <span style="padding: 12px 26px; color: #9FB0C8; display: flex; align-items: center; gap: 12px;"><span style="opacity:.7;">&#9673;</span> Cohorts</span>
+          <span style="padding: 12px 26px; color: #fff; background: rgba(222,90,28,0.16); border-left: 3px solid #DE5A1C; display: flex; align-items: center; gap: 12px;"><span style="color:#DE5A1C;">&#9673;</span> Grading</span>
+        </nav>
+        <div style="margin-top: auto; padding: 0 26px;">
+          <div style="padding-top: 14px; border-top: 1px solid rgba(255,255,255,0.08);">
+            <span style="color: #7C8DA6; font-size: 13px; cursor: pointer;">Log out</span>
+          </div>
+        </div>
+      </div>
+
+      <div style="flex: 1;">
+        <div style="padding: 40px 48px 54px;">
+          <h1 style="font-family: 'Jost'; font-weight: 600; font-size: 34px; color: #152744; margin: 0 0 6px;">Grading queue</h1>
+          <div style="font-size: 14px; color: #6C7A93; margin-bottom: 28px;">6 responses awaiting grading</div>
+
+          <div style="background: #fff; border: 1px solid #E4E8EE; border-radius: 10px; overflow: hidden;">
+            <div style="display: grid; grid-template-columns: 160px 130px 1fr 150px 110px 80px 90px; padding: 14px 26px; font-family: 'Jost'; font-weight: 600; font-size: 11px; letter-spacing: 1px; text-transform: uppercase; color: #8A97AC; border-bottom: 1px solid #EEF1F4;">
+              <span>Fellow</span><span>Class</span><span>Question</span><span>Attempt</span><span>Submitted</span><span>Points</span><span></span>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 160px 130px 1fr 150px 110px 80px 90px; align-items: center; padding: 18px 26px; border-bottom: 1px solid #EEF1F4; gap: 10px;">
+              <span style="font-size: 14.5px; font-weight: 600; color: #152744;">Stage3 Test Fellow</span>
+              <span style="font-size: 13.5px; color: #6C7A93;">QA Test Class</span>
+              <span style="font-size: 13.5px; line-height: 1.55; color: #3A4A66;">Juma works for an NGO in the education sector called MasomoBora. He wants to visit a school in Arusha to learn about the school schedule and their extra-curricular activities policy. What is the best way to go about this?</span>
+              <div>
+                <div style="font-size: 13.5px; color: #152744;">Attempt 2 of 2</div>
+                <span style="font-size: 10.5px; font-family: 'Jost'; font-weight: 600; letter-spacing: 0.3px; text-transform: uppercase; color: #6C7A93; border: 1px solid #D6DBE3; padding: 2px 8px; border-radius: 20px; display: inline-block; margin-top: 4px;">Counts toward score</span>
+              </div>
+              <span style="font-size: 13px; color: #8A97AC;">20 hours ago</span>
+              <span style="font-family: 'Jost'; font-weight: 600; font-size: 13.5px; color: #152744;">10 pts</span>
+              <span style="background: #DE5A1C; color: #fff; font-family: 'Jost'; font-weight: 600; font-size: 13px; padding: 8px 18px; border-radius: 6px; text-align: center; width: fit-content;">Grade</span>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 160px 130px 1fr 150px 110px 80px 90px; align-items: center; padding: 18px 26px; border-bottom: 1px solid #EEF1F4; gap: 10px;">
+              <span style="font-size: 14.5px; font-weight: 600; color: #152744;">Joe Muthui</span>
+              <span style="font-size: 13.5px; color: #6C7A93;">QA Test Class</span>
+              <span style="font-size: 13.5px; line-height: 1.55; color: #3A4A66;">Juma works for an NGO in the education sector called MasomoBora. He wants to visit a school in Arusha to learn about the school schedule and their extra-curricular activities policy. What is the best way to go about this?</span>
+              <div>
+                <div style="font-size: 13.5px; color: #152744;">Attempt 1 of 2</div>
+              </div>
+              <span style="font-size: 13px; color: #8A97AC;">20 hours ago</span>
+              <span style="font-family: 'Jost'; font-weight: 600; font-size: 13.5px; color: #152744;">10 pts</span>
+              <span style="background: #DE5A1C; color: #fff; font-family: 'Jost'; font-weight: 600; font-size: 13px; padding: 8px 18px; border-radius: 6px; text-align: center; width: fit-content;">Grade</span>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 160px 130px 1fr 150px 110px 80px 90px; align-items: center; padding: 18px 26px; border-bottom: 1px solid #EEF1F4; gap: 10px;">
+              <span style="font-size: 14.5px; font-weight: 600; color: #152744;">Joe Muthui</span>
+              <span style="font-size: 13.5px; color: #6C7A93;">QA Test Class</span>
+              <span style="font-size: 13.5px; line-height: 1.55; color: #3A4A66;">Juma works for an NGO in the education sector called MasomoBora. He wants to visit a school in Arusha to learn about the school schedule and their extra-curricular activities policy. What is the best way to go about this?</span>
+              <div>
+                <div style="font-size: 13.5px; color: #152744;">Attempt 2 of 2</div>
+                <span style="font-size: 10.5px; font-family: 'Jost'; font-weight: 600; letter-spacing: 0.3px; text-transform: uppercase; color: #6C7A93; border: 1px solid #D6DBE3; padding: 2px 8px; border-radius: 20px; display: inline-block; margin-top: 4px;">Counts toward score</span>
+              </div>
+              <span style="font-size: 13px; color: #8A97AC;">20 hours ago</span>
+              <span style="font-family: 'Jost'; font-weight: 600; font-size: 13.5px; color: #152744;">10 pts</span>
+              <span style="background: #DE5A1C; color: #fff; font-family: 'Jost'; font-weight: 600; font-size: 13px; padding: 8px 18px; border-radius: 6px; text-align: center; width: fit-content;">Grade</span>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 160px 130px 1fr 150px 110px 80px 90px; align-items: center; padding: 18px 26px; border-bottom: 1px solid #EEF1F4; gap: 10px;">
+              <span style="font-size: 14.5px; font-weight: 600; color: #152744;">Eugene Muthui</span>
+              <span style="font-size: 13.5px; color: #6C7A93;">QA Test Class</span>
+              <span style="font-size: 13.5px; line-height: 1.55; color: #3A4A66;">Juma works for an NGO in the education sector called MasomoBora. He wants to visit a school in Arusha to learn about the school schedule and their extra-curricular activities policy. What is the best way to go about this?</span>
+              <div>
+                <div style="font-size: 13.5px; color: #152744;">Attempt 1 of 2</div>
+              </div>
+              <span style="font-size: 13px; color: #8A97AC;">20 hours ago</span>
+              <span style="font-family: 'Jost'; font-weight: 600; font-size: 13.5px; color: #152744;">10 pts</span>
+              <span style="background: #DE5A1C; color: #fff; font-family: 'Jost'; font-weight: 600; font-size: 13px; padding: 8px 18px; border-radius: 6px; text-align: center; width: fit-content;">Grade</span>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 160px 130px 1fr 150px 110px 80px 90px; align-items: center; padding: 18px 26px; border-bottom: 1px solid #EEF1F4; gap: 10px;">
+              <span style="font-size: 14.5px; font-weight: 600; color: #152744;">Eugene Muthui</span>
+              <span style="font-size: 13.5px; color: #6C7A93;">QA Test Class</span>
+              <span style="font-size: 13.5px; line-height: 1.55; color: #3A4A66;">Juma works for an NGO in the education sector called MasomoBora. He wants to visit a school in Arusha to learn about the school schedule and their extra-curricular activities policy. What is the best way to go about this?</span>
+              <div>
+                <div style="font-size: 13.5px; color: #152744;">Attempt 2 of 2</div>
+                <span style="font-size: 10.5px; font-family: 'Jost'; font-weight: 600; letter-spacing: 0.3px; text-transform: uppercase; color: #6C7A93; border: 1px solid #D6DBE3; padding: 2px 8px; border-radius: 20px; display: inline-block; margin-top: 4px;">Counts toward score</span>
+              </div>
+              <span style="font-size: 13px; color: #8A97AC;">20 hours ago</span>
+              <span style="font-family: 'Jost'; font-weight: 600; font-size: 13.5px; color: #152744;">10 pts</span>
+              <span style="background: #DE5A1C; color: #fff; font-family: 'Jost'; font-weight: 600; font-size: 13px; padding: 8px 18px; border-radius: 6px; text-align: center; width: fit-content;">Grade</span>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 160px 130px 1fr 150px 110px 80px 90px; align-items: center; padding: 18px 26px; gap: 10px;">
+              <span style="font-size: 14.5px; font-weight: 600; color: #152744;">James Ludex</span>
+              <span style="font-size: 13.5px; color: #6C7A93;">QA Test Class</span>
+              <span style="font-size: 13.5px; line-height: 1.55; color: #3A4A66;">Juma works for an NGO in the education sector called MasomoBora. He wants to visit a school in Arusha to learn about the school schedule and their extra-curricular activities policy. What is the best way to go about this?</span>
+              <div>
+                <div style="font-size: 13.5px; color: #152744;">Attempt 1 of 2</div>
+              </div>
+              <span style="font-size: 13px; color: #8A97AC;">13 hours ago</span>
+              <span style="font-family: 'Jost'; font-weight: 600; font-size: 13.5px; color: #152744;">10 pts</span>
+              <span style="background: #DE5A1C; color: #fff; font-family: 'Jost'; font-weight: 600; font-size: 13px; padding: 8px 18px; border-radius: 6px; text-align: center; width: fit-content;">Grade</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ 4A — LOGIN: TOP BANNER ============ -->
+  <div id="4a" style="display: flex; flex-direction: column; gap: 16px;">
+    <div style="display: flex; align-items: baseline; gap: 14px;">
+      <span style="background: #DE5A1C; color: #fff; font-family: 'Jost'; font-weight: 600; font-size: 15px; letter-spacing: 1px; padding: 6px 14px; border-radius: 4px;">4A</span>
+      <div>
+        <div style="font-family: 'Jost'; font-weight: 600; font-size: 20px; color: #152744;">Login — Top banner <span style="font-family:'Mulish'; font-weight: 600; font-size: 11px; letter-spacing: 0.5px; text-transform: uppercase; color: #152744; background: #EEF1F4; padding: 3px 9px; border-radius: 20px; vertical-align: middle; margin-left: 4px;">New</span></div>
+        <div style="font-family: 'Mulish'; font-size: 13px; color: #5a6a82;">Full-width navy banner with the wordmark, plain page below, centered card form.</div>
+      </div>
+    </div>
+
+    <div style="width: 1180px; height: 720px; background: #F4F6F9; border-radius: 8px; overflow: hidden; box-shadow: 0 30px 70px -30px rgba(21,39,68,0.4); font-family: 'Mulish'; display: flex; flex-direction: column;">
+      <div style="height: 84px; flex-shrink: 0; background: #132239; background-image: url(&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='90' height='78'%3E%3Cpath d='M0 78 L45 0 L90 78' fill='none' stroke='%23ffffff' stroke-opacity='0.04' stroke-width='1'/%3E%3Cpath d='M-45 78 L0 0 L45 78' fill='none' stroke='%23ffffff' stroke-opacity='0.04' stroke-width='1'/%3E%3Cpath d='M45 78 L90 0 L135 78' fill='none' stroke='%23ffffff' stroke-opacity='0.04' stroke-width='1'/%3E%3C/svg%3E&quot;); display: flex; align-items: center; justify-content: center;">
+        <div style="font-family: 'Jost'; font-weight: 600; letter-spacing: 2px; font-size: 19px; color: #fff; text-transform: uppercase;">Tanza <span style="color:#DE5A1C;">Fellowship Hub</span></div>
+      </div>
+
+      <div style="flex: 1; display: flex; align-items: center; justify-content: center;">
+        <div style="width: 400px; background: #fff; border: 1px solid #E4E8EE; border-radius: 10px; box-shadow: 0 20px 45px -25px rgba(21,39,68,0.25); padding: 40px 40px 34px;">
+          <h1 style="font-family: 'Jost'; font-weight: 600; font-size: 26px; color: #152744; margin: 0 0 26px;">Log in</h1>
+
+          <label style="display: block; font-family: 'Jost'; font-weight: 600; font-size: 13px; color: #152744; margin-bottom: 8px;">Email</label>
+          <input value="yonasbek4@gmail.com" style="width: 100%; box-sizing: border-box; border: 1px solid #D6DBE3; border-radius: 8px; padding: 12px 15px; font-family: 'Mulish'; font-size: 15px; color: #1E2B45; margin-bottom: 20px; background: #fff;">
+
+          <label style="display: block; font-family: 'Jost'; font-weight: 600; font-size: 13px; color: #152744; margin-bottom: 8px;">Password</label>
+          <input type="password" value="pw" style="width: 100%; box-sizing: border-box; border: 1px solid #D6DBE3; border-radius: 8px; padding: 12px 15px; font-family: 'Mulish'; font-size: 15px; color: #1E2B45; margin-bottom: 26px; background: #fff;">
+
+          <button style="width: 100%; background: #DE5A1C; color: #fff; border: none; font-family: 'Jost'; font-weight: 600; font-size: 15px; padding: 14px; border-radius: 8px; cursor: pointer;">Log in</button>
+
+          <div style="text-align: center; margin-top: 22px; font-size: 14px; color: #6C7A93;">Need an account? <a href="#" style="color: #DE5A1C; font-weight: 600;">Sign up</a></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ 4B — LOGIN: SPLIT HERO ============ -->
+  <div id="4b" style="display: flex; flex-direction: column; gap: 16px;">
+    <div style="display: flex; align-items: baseline; gap: 14px;">
+      <span style="background: #DE5A1C; color: #fff; font-family: 'Jost'; font-weight: 600; font-size: 15px; letter-spacing: 1px; padding: 6px 14px; border-radius: 4px;">4B</span>
+      <div>
+        <div style="font-family: 'Jost'; font-weight: 600; font-size: 20px; color: #152744;">Login — Split hero <span style="font-family:'Mulish'; font-weight: 600; font-size: 11px; letter-spacing: 0.5px; text-transform: uppercase; color: #152744; background: #EEF1F4; padding: 3px 9px; border-radius: 20px; vertical-align: middle; margin-left: 4px;">New</span></div>
+        <div style="font-family: 'Mulish'; font-size: 13px; color: #5a6a82;">Navy brand panel on the left doubles as the "banner", borderless form on the right.</div>
+      </div>
+    </div>
+
+    <div style="width: 1180px; height: 720px; background: #F4F6F9; border-radius: 8px; overflow: hidden; box-shadow: 0 30px 70px -30px rgba(21,39,68,0.4); font-family: 'Mulish'; display: flex;">
+      <div style="width: 46%; flex-shrink: 0; background: #132239; background-image: url(&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='90' height='78'%3E%3Cpath d='M0 78 L45 0 L90 78' fill='none' stroke='%23ffffff' stroke-opacity='0.04' stroke-width='1'/%3E%3Cpath d='M-45 78 L0 0 L45 78' fill='none' stroke='%23ffffff' stroke-opacity='0.04' stroke-width='1'/%3E%3Cpath d='M45 78 L90 0 L135 78' fill='none' stroke='%23ffffff' stroke-opacity='0.04' stroke-width='1'/%3E%3C/svg%3E&quot;); display: flex; align-items: center; justify-content: center;">
+        <div style="text-align: center;">
+          <div style="font-family: 'Jost'; font-weight: 600; letter-spacing: 6px; font-size: 40px; color: #fff; text-transform: uppercase;">Tanza</div>
+          <div style="font-family: 'Jost'; font-weight: 600; letter-spacing: 4px; font-size: 15px; color: #DE5A1C; text-transform: uppercase; margin-top: 8px;">Fellowship Hub</div>
+          <div style="width: 40px; height: 2px; background: rgba(255,255,255,0.18); margin: 26px auto;"></div>
+          <div style="font-size: 14px; color: #9FB0C8; max-width: 260px; line-height: 1.6;">Leadership development for Tanzania's changemakers.</div>
+        </div>
+      </div>
+
+      <div style="flex: 1; display: flex; align-items: center; justify-content: center; background: #fff;">
+        <div style="width: 360px;">
+          <h1 style="font-family: 'Jost'; font-weight: 600; font-size: 26px; color: #152744; margin: 0 0 26px;">Log in</h1>
+
+          <label style="display: block; font-family: 'Jost'; font-weight: 600; font-size: 13px; color: #152744; margin-bottom: 8px;">Email</label>
+          <input value="yonasbek4@gmail.com" style="width: 100%; box-sizing: border-box; border: 1px solid #D6DBE3; border-radius: 8px; padding: 12px 15px; font-family: 'Mulish'; font-size: 15px; color: #1E2B45; margin-bottom: 20px; background: #fff;">
+
+          <label style="display: block; font-family: 'Jost'; font-weight: 600; font-size: 13px; color: #152744; margin-bottom: 8px;">Password</label>
+          <input type="password" value="pw" style="width: 100%; box-sizing: border-box; border: 1px solid #D6DBE3; border-radius: 8px; padding: 12px 15px; font-family: 'Mulish'; font-size: 15px; color: #1E2B45; margin-bottom: 26px; background: #fff;">
+
+          <button style="width: 100%; background: #DE5A1C; color: #fff; border: none; font-family: 'Jost'; font-weight: 600; font-size: 15px; padding: 14px; border-radius: 8px; cursor: pointer;">Log in</button>
+
+          <div style="text-align: center; margin-top: 22px; font-size: 14px; color: #6C7A93;">Need an account? <a href="#" style="color: #DE5A1C; font-weight: 600;">Sign up</a></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ 4C — LOGIN: BANNER CARD ============ -->
+  <div id="4c" style="display: flex; flex-direction: column; gap: 16px;">
+    <div style="display: flex; align-items: baseline; gap: 14px;">
+      <span style="background: #DE5A1C; color: #fff; font-family: 'Jost'; font-weight: 600; font-size: 15px; letter-spacing: 1px; padding: 6px 14px; border-radius: 4px;">4C</span>
+      <div>
+        <div style="font-family: 'Jost'; font-weight: 600; font-size: 20px; color: #152744;">Login — Banner card <span style="font-family:'Mulish'; font-weight: 600; font-size: 11px; letter-spacing: 0.5px; text-transform: uppercase; color: #152744; background: #EEF1F4; padding: 3px 9px; border-radius: 20px; vertical-align: middle; margin-left: 4px;">New</span></div>
+        <div style="font-family: 'Mulish'; font-size: 13px; color: #5a6a82;">Closest to the original layout: one card, but its own top strip is the navy banner.</div>
+      </div>
+    </div>
+
+    <div style="width: 1180px; height: 720px; background: #F4F6F9; border-radius: 8px; overflow: hidden; box-shadow: 0 30px 70px -30px rgba(21,39,68,0.4); font-family: 'Mulish'; display: flex; align-items: center; justify-content: center;">
+      <div style="width: 420px; background: #fff; border: 1px solid #E4E8EE; border-radius: 14px; overflow: hidden; box-shadow: 0 20px 45px -25px rgba(21,39,68,0.25);">
+        <div style="height: 96px; background: #132239; background-image: url(&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='90' height='78'%3E%3Cpath d='M0 78 L45 0 L90 78' fill='none' stroke='%23ffffff' stroke-opacity='0.04' stroke-width='1'/%3E%3Cpath d='M-45 78 L0 0 L45 78' fill='none' stroke='%23ffffff' stroke-opacity='0.04' stroke-width='1'/%3E%3Cpath d='M45 78 L90 0 L135 78' fill='none' stroke='%23ffffff' stroke-opacity='0.04' stroke-width='1'/%3E%3C/svg%3E&quot;); display: flex; align-items: center; justify-content: center;">
+          <div style="font-family: 'Jost'; font-weight: 600; letter-spacing: 1.5px; font-size: 17px; color: #fff; text-transform: uppercase; text-align: center; line-height: 1.4;">Tanza<br><span style="color:#DE5A1C;">Fellowship Hub</span></div>
+        </div>
+
+        <div style="padding: 32px 36px 34px;">
+          <h1 style="font-family: 'Jost'; font-weight: 600; font-size: 22px; color: #152744; margin: 0 0 22px;">Log in</h1>
+
+          <label style="display: block; font-family: 'Jost'; font-weight: 600; font-size: 13px; color: #152744; margin-bottom: 8px;">Email</label>
+          <input value="yonasbek4@gmail.com" style="width: 100%; box-sizing: border-box; border: 1px solid #D6DBE3; border-radius: 8px; padding: 12px 15px; font-family: 'Mulish'; font-size: 15px; color: #1E2B45; margin-bottom: 18px; background: #fff;">
+
+          <label style="display: block; font-family: 'Jost'; font-weight: 600; font-size: 13px; color: #152744; margin-bottom: 8px;">Password</label>
+          <input type="password" value="pw" style="width: 100%; box-sizing: border-box; border: 1px solid #D6DBE3; border-radius: 8px; padding: 12px 15px; font-family: 'Mulish'; font-size: 15px; color: #1E2B45; margin-bottom: 24px; background: #fff;">
+
+          <button style="width: 100%; background: #DE5A1C; color: #fff; border: none; font-family: 'Jost'; font-weight: 600; font-size: 15px; padding: 14px; border-radius: 8px; cursor: pointer;">Log in</button>
+
+          <div style="text-align: center; margin-top: 20px; font-size: 14px; color: #6C7A93;">Need an account? <a href="#" style="color: #DE5A1C; font-weight: 600;">Sign up</a></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</section>
+</x-dc>
+</body>
+</html>

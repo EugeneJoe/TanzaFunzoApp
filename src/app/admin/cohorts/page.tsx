@@ -28,8 +28,8 @@ export default async function AdminCohortsPage() {
   }
 
   return (
-    <div className="flex flex-col gap-6 p-6">
-      <h1 className="text-2xl font-semibold">Cohorts</h1>
+    <div className="mx-auto flex w-full max-w-[1280px] flex-col gap-6 px-8 py-10 sm:px-12">
+      <h1 className="font-heading text-[32px] font-semibold text-navy-900">Cohorts</h1>
       {cohortsList.map((cohort) => {
         const members = (membersByCohort.get(cohort.id) ?? []).sort((a, b) =>
           a.user.fullName.localeCompare(b.user.fullName)
@@ -39,11 +39,11 @@ export default async function AdminCohortsPage() {
         return (
           <Card key={cohort.id}>
             <CardHeader>
-              <CardTitle className="flex items-center gap-2">
+              <CardTitle className="flex items-center gap-2 text-lg">
                 {cohort.name}
                 <Badge variant="secondary">{cohort.status}</Badge>
               </CardTitle>
-              <p className="text-sm text-muted-foreground">
+              <p className="text-sm text-text-faint">
                 Starts {cohort.startDate} · enrolment window {cohort.enrolOpenAt} – {cohort.enrolCloseAt} ·{" "}
                 {members.length} fellow{members.length === 1 ? "" : "s"}
               </p>
@@ -55,17 +55,29 @@ export default async function AdminCohortsPage() {
                 <Table>
                   <TableHeader>
                     <TableRow>
-                      <TableHead>Name</TableHead>
-                      <TableHead>Email</TableHead>
-                      <TableHead>Assigned by</TableHead>
-                      {otherCohorts.length > 0 && <TableHead className="text-right">Move to</TableHead>}
+                      <TableHead className="font-heading text-[11px] font-semibold tracking-[1px] text-text-faint uppercase">
+                        Name
+                      </TableHead>
+                      <TableHead className="font-heading text-[11px] font-semibold tracking-[1px] text-text-faint uppercase">
+                        Email
+                      </TableHead>
+                      <TableHead className="font-heading text-[11px] font-semibold tracking-[1px] text-text-faint uppercase">
+                        Assigned by
+                      </TableHead>
+                      {otherCohorts.length > 0 && (
+                        <TableHead className="text-right font-heading text-[11px] font-semibold tracking-[1px] text-text-faint uppercase">
+                          Move to
+                        </TableHead>
+                      )}
                     </TableRow>
                   </TableHeader>
                   <TableBody>
                     {members.map((enrollment) => (
                       <TableRow key={enrollment.id}>
-                        <TableCell>{enrollment.user.fullName}</TableCell>
-                        <TableCell>{enrollment.user.email}</TableCell>
+                        <TableCell className="text-[14.5px] font-semibold text-navy-900">
+                          {enrollment.user.fullName}
+                        </TableCell>
+                        <TableCell className="text-text-faint">{enrollment.user.email}</TableCell>
                         <TableCell>
                           <Badge variant={enrollment.assignedBy === "admin" ? "default" : "outline"}>
                             {enrollment.assignedBy}
