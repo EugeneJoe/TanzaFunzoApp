@@ -206,12 +206,18 @@ export function QuestionCard({
           availableTags={availableTags}
           disabled={locked}
         />
-        <WeightsEditor
-          aptitudes={aptitudes}
-          currentWeights={currentWeights}
-          disabled={locked}
-          onSave={(weights) => setWeightsAction(assessmentId, "question", questionId, weights)}
-        />
+        <div className="flex flex-col gap-1">
+          <WeightsEditor
+            aptitudes={aptitudes}
+            currentWeights={currentWeights}
+            onSave={(weights) => setWeightsAction(assessmentId, "question", questionId, weights)}
+          />
+          {locked && (
+            <p className="text-xs text-muted-foreground">
+              Weights stay editable even when locked — scores recompute from the existing signal ledger.
+            </p>
+          )}
+        </div>
       </div>
     </div>
   );

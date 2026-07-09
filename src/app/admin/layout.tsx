@@ -19,6 +19,9 @@ export default async function AdminLayout({ children }: { children: React.ReactN
             <Link href="/admin/cohorts" className="hover:text-foreground">
               Cohorts
             </Link>
+            <Link href="/admin/grading" className="hover:text-foreground">
+              Grading
+            </Link>
           </nav>
         </div>
         <LogoutButton />

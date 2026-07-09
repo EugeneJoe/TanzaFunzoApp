@@ -4,7 +4,7 @@ import { db } from "@/db";
 import { blocks } from "@/db/schema";
 import type { BlockConfigMap } from "@/db/schema";
 
-export type AssessmentLocation = { classId: string; classTitle: string; moduleTitle: string };
+export type AssessmentLocation = { classId: string; classTitle: string; moduleId: string; moduleTitle: string };
 
 /**
  * assessments aren't FK-linked to a class — the link only exists as an
@@ -24,7 +24,12 @@ export async function getAssessmentClassMap(): Promise<Map<string, AssessmentLoc
     const assessmentId = (block.config as BlockConfigMap["assessment"]).assessmentId;
     const cls = block.pageVersion?.page?.class;
     if (!cls || map.has(assessmentId)) continue;
-    map.set(assessmentId, { classId: cls.id, classTitle: cls.title, moduleTitle: cls.module.title });
+    map.set(assessmentId, {
+      classId: cls.id,
+      classTitle: cls.title,
+      moduleId: cls.module.id,
+      moduleTitle: cls.module.title,
+    });
   }
   return map;
 }

@@ -10,12 +10,14 @@ import {
   aptitudeWeights,
   assessmentQuestions,
   assessments,
+  auditLog,
   questionTags,
   questions,
   submissions,
 } from "@/db/schema";
 import { mcOptionsSchema, weightInputSchema } from "@/lib/validation/questions";
 import { aptitudeWeightsSumTo100 } from "@/lib/assessment-rollup";
+import { recomputeAll } from "@/lib/recompute";
 import { z } from "zod";
 
 async function isLocked(assessmentId: string): Promise<boolean> {
@@ -166,6 +168,12 @@ export type SetWeightsResult = { error?: string };
  * Shared by every "counts toward" weights UI (data-model.md D1: one table,
  * one component). Refuses to persist unless the given weights sum to 100 —
  * AC-2 requires this rejection to surface as a field error, not a crash.
+ *
+ * Deliberately NOT gated by assertNotLocked, unlike every other mutation in
+ * this file: re-weighting an already-submitted-to question is exactly what
+ * the append-only signals ledger exists to make safe mid-cohort (data-
+ * model.md §5 intro; FR-7.2/FR-7.5; demo-path step 10). Structural edits
+ * (body, options, points) still lock — only the aptitude split doesn't.
  */
 export async function setWeightsAction(
   assessmentId: string,
@@ -173,14 +181,17 @@ export async function setWeightsAction(
   subjectId: string,
   weights: Array<{ termId: string; weight: number }>
 ): Promise<SetWeightsResult> {
-  await requireRole("admin");
-  await assertNotLocked(assessmentId);
+  const session = await requireRole("admin");
 
   const parsed = weightsInputSchema.parse(weights);
   const nonZero = parsed.filter((w) => w.weight > 0);
   if (!aptitudeWeightsSumTo100(nonZero)) {
     return { error: "Weights must add up to 100%." };
   }
+
+  const before = await db.query.aptitudeWeights.findMany({
+    where: and(eq(aptitudeWeights.subjectType, subjectType), eq(aptitudeWeights.subjectId, subjectId)),
+  });
 
   await db.transaction(async (tx) => {
     await tx
@@ -191,7 +202,19 @@ export async function setWeightsAction(
         .insert(aptitudeWeights)
         .values(nonZero.map((w) => ({ subjectType, subjectId, termId: w.termId, weight: String(w.weight) })));
     }
+    await tx.insert(auditLog).values({
+      actorId: session.userId,
+      action: "update_weights",
+      entityType: subjectType,
+      entityId: subjectId,
+      before: before.map((w) => ({ termId: w.termId, weight: Number(w.weight) })),
+      after: nonZero,
+    });
   });
+
+  // Full, not incremental: a weight change can affect every fellow who has
+  // ever answered this question, not just one (data-model.md §5.5).
+  await recomputeAll();
   revalidate(assessmentId);
   return {};
 }
