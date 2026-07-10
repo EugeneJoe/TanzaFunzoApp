@@ -53,22 +53,23 @@ export function AppSidebar(props: LearnerProps | AdminProps) {
   const navItems =
     props.variant === "learner"
       ? [
+          { href: "/dashboard", label: "Dashboard" },
           { href: "/learn", label: "My journey" },
           { href: "/me", label: "My coursework" },
         ]
       : [
+          { href: "/admin", label: "Dashboard" },
           { href: "/admin/curriculum", label: "Curriculum" },
           { href: "/admin/cohorts", label: "Cohorts" },
           { href: "/admin/grading", label: "Grading" },
         ];
 
-  // The admin shell has no dedicated "Overview" nav entry — /admin (the
-  // per-cohort dashboard) is reached via the wordmark and is conceptually
-  // part of Cohorts, so both routes light up the same nav item (matches
-  // the handoff: 3A and 3B screenshots both show "Cohorts" active).
+  // /admin (Dashboard) must match exactly — every other admin route (e.g.
+  // /admin/cohorts) is reached only via its own nav item now that Dashboard
+  // is no longer the fallback for "no dedicated screen".
   function isNavActive(href: string) {
     if (props.variant === "admin" && href === "/admin/cohorts") {
-      return pathname === "/admin" || pathname.startsWith("/admin/cohorts");
+      return pathname.startsWith("/admin/cohorts");
     }
     return pathname === href;
   }
@@ -85,7 +86,7 @@ export function AppSidebar(props: LearnerProps | AdminProps) {
     >
       <div className="px-6 py-7">
         <Link
-          href={props.variant === "learner" ? "/learn" : "/admin"}
+          href={props.variant === "learner" ? "/dashboard" : "/admin"}
           className="block font-heading text-sm leading-[1.3] font-semibold tracking-[2px] text-white uppercase"
         >
           Tanza

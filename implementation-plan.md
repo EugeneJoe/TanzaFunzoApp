@@ -73,6 +73,7 @@ admin creates a class in a module → composes the page from blocks → previews
 | 6 | Stretch tiers (in order) | Only after Stage 5 passes |
 | 7 | Handover artifacts | README + demo checklist |
 | 8 | Brand restyle (added 9 Jul) | App matches the Tanza brand design handoff — see §10 |
+| 9 | Dashboard split + cohort creation (added 10 Jul) | Fellows land on a dedicated dashboard; admins can create cohorts — see §11 |
 
 Stages run strictly in order; a stage is complete only when every acceptance criterion (AC) passes and the work is committed and deployed.
 
@@ -281,3 +282,59 @@ All content exists — restyle only: scorecards with faint 13px labels, Jost 600
 ### Stage 8 guardrails (additions to §8)
 
 No dark-mode styling work · no mobile-specific redesign (responsive fallback is enough) · never copy the prototype HTML's markup or inline styles — extract shared pieces (sidebar, cards, badges, overline) into components · no new data, schema, or action changes · don't build the populated "Attention" list design (not designed — keep existing content, token-level restyle only) · emoji/unicode glyphs from the prototype become `lucide-react` icons.
+
+---
+
+## 11. Stage 9 — Dashboard split + cohort creation (design update, 10 July 2026)
+
+**Source of truth:** `design_handoff_tanza_restyle/README.md` (updated 10 Jul: screen `2C` is now **Dashboard**, screen `2E` **My coursework** is new, screen `3B` gains an **"Add a cohort"** form card, both sidebars gain a **Dashboard** nav item first) and `screenshots/2C-dashboard.png`, `2E-my-coursework.png`, `3B-admin-cohorts.png`.
+
+**What this is:** three small feature changes on top of the Stage 8 visuals:
+1. Split the fellow `/me` page — the "Your development" content moves to a new **`/dashboard`** route; `/me` keeps only the "Your coursework" submission list.
+2. Fellows land on `/dashboard` after login/signup (admins keep landing on `/admin`).
+3. An **add-cohort form** at the top of `/admin/cohorts`.
+
+**What this is NOT:** password reset (any variant) stays out — deliberate cut reaffirmed 10 Jul. No new schema (the `cohorts` table already has every column the form needs). No admin dashboard screen — the admin sidebar's "Dashboard" item simply points at the existing `/admin` cohort overview.
+
+**Ordering:** runs after Stage 8; same per-phase bar — `tsc --noEmit` clean, production deploy, curl smoke of the demo-path routes (preview tool cannot launch this app).
+
+### Phase 9.1 — Fellow dashboard split (`/me` → `/dashboard` + `/me`)
+
+Tasks:
+1. **New route `src/app/(fellow)/dashboard/page.tsx`** — move the "Your development" content out of `src/app/(fellow)/me/page.tsx` verbatim (H1 "Your development", meta line, 3-up aptitude scorecards + trends, "You and the cohort" band panel, Strengths/Focus cards, module progress bar + caption, and their queries: `computeFellowAptitudeSnapshot`, journey, cohort bands, competency averages). The progress caption's "· n assessments pending" count needs the fellow's submissions — keep a lightweight submissions query here for that count only.
+2. **Slim `/me` to the coursework list** — H1 becomes "Your coursework" (page title, not an H2 section), keeping the submission rows exactly as built (solid navy "Graded" pill, points in plain navy, "View" → results). Queries reduce to submissions + `getSubmissionResult` + `getAssessmentClassMap`.
+3. **Sidebar nav** (`src/components/app-sidebar.tsx`): learner nav becomes **Dashboard** (`/dashboard`) → My journey (`/learn`) → My coursework (`/me`); admin nav becomes **Dashboard** (`/admin`) → Curriculum → Cohorts → Grading. Update `isNavActive` so `/admin` matches exactly (it must not light up on `/admin/curriculum` etc. — the existing `/admin/cohorts` prefix special-case stands) and the learner wordmark + avatar links point at `/dashboard`.
+4. **Route protection** (`src/proxy.ts`): add `"/dashboard"` to `AUTHENTICATED_PREFIXES`. The matcher's negative pattern already covers the path; the prefix list is what enforces auth — miss it and the page leans only on `requireUser`.
+
+**AC-9.1:**
+- [ ] `/dashboard` renders the development content and `/me` renders only the coursework list; both match their screenshots (`2C-dashboard.png`, `2E-my-coursework.png`); nav highlights the right item on each.
+- [ ] No data-layer changes: every number on `/dashboard` comes from the same queries `/me` used before the split.
+- [ ] Unauthenticated request to `/dashboard` redirects to `/login` (proxy, not just the page guard).
+- [ ] Admin sidebar "Dashboard" highlights on `/admin` only, not on other `/admin/*` routes.
+
+### Phase 9.2 — Fellows land on the dashboard
+
+Tasks:
+1. `src/app/login/actions.ts` — fellow fallback redirect `/learn` → `/dashboard` (admin → `/admin` and the `next` param guard unchanged).
+2. `src/app/signup/actions.ts` — post-signup redirect `/learn` → `/dashboard`.
+3. `src/app/page.tsx` — authenticated non-admin redirect `/learn` → `/dashboard`.
+
+**AC-9.2:**
+- [ ] Fellow login, fellow signup, and an authenticated visit to `/` all land on `/dashboard`; admin login still lands on `/admin`; `?next=` still wins when present.
+
+### Phase 9.3 — Add-cohort form (`/admin/cohorts`, screen 3B)
+
+Tasks:
+1. **Server action** `createCohortAction` in `src/app/admin/cohorts/actions.ts`: `requireRole("admin")`; validate name non-empty and all three dates present; reject `enrolCloseAt < enrolOpenAt`; insert with `status: "active"` (schema default); `revalidatePath("/admin/cohorts")`. Return validation errors as data (same pattern as the auth actions), not thrown.
+2. **Form card** at the top of the page, above the cohort cards, per the handoff: white `Card` titled "Add a cohort"; a 5-column field grid — **Cohort name** (text, placeholder "Cohort n"), **Start date**, **Enrolment opens**, **Enrolment closes** (native date inputs), each with a Jost 600 12px label above; primary orange "+ Add cohort" `Button` right-aligned below the grid. Client component with pending state on submit (Stage 5 polish bar applies).
+3. **Auto-assign awareness:** signup auto-assignment picks the earliest-starting cohort whose enrolment window contains today (`src/app/signup/actions.ts`) — creating a cohort with an open window that overlaps an existing one silently redirects new signups. Don't block overlaps (creating next cohorts ahead of time is the whole point); show a non-blocking hint under the form when the submitted window overlaps another active cohort's, and note the rule in the card's help text.
+
+**AC-9.3:**
+- [ ] Admin can create a cohort from the form; it appears in the page list, as a "Move to" reassign target on other cohorts' rosters, and (if its window is open and it starts earliest) receives new signups.
+- [ ] Close-before-open and missing fields are rejected with an inline message; nothing is inserted.
+- [ ] Non-admin session invoking the action gets a 403/redirect, not an insert.
+- [ ] Matches `3B-admin-cohorts.png` (field grid, labels, orange button).
+
+### Stage 9 guardrails (additions to §8)
+
+No password reset in any form (revisit post-beta) · no admin dashboard page (nav item reuses `/admin`) · no cohort edit/archive/delete UI (create only — status stays `active`) · no changes to the recompute/signals layer · enrollments remain append-only (the form never touches enrollments).

@@ -154,3 +154,20 @@ export const classQuestionReplies = pgTable("class_question_replies", {
   status: text("status").notNull().default("visible"), // visible | hidden
   ...timestamps(),
 });
+
+// --- 2.3 Class views (progress-bar completion tracking) ---
+//
+// A class with no assessment block has no other signal that a fellow ever
+// engaged with it — this records "opened the page" as its completion
+// marker. Classes with an assessment block don't use this table at all;
+// their completion is derived from submissions existing instead (see
+// src/lib/completion.ts). One row per (user, class), inserted once on
+// first view and never updated — completion is a one-time achievement.
+export const classViews = pgTable("class_views", {
+  id: uuidPk(),
+  userId: uuid("user_id").notNull().references(() => users.id),
+  classId: uuid("class_id").notNull().references(() => classes.id),
+  viewedAt: timestamp("viewed_at", { withTimezone: true }).notNull().defaultNow(),
+}, (table) => [
+  uniqueIndex("class_views_user_class_key").on(table.userId, table.classId),
+]);

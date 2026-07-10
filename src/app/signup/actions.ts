@@ -66,5 +66,5 @@ export async function signupAction(_prevState: SignupState, formData: FormData):
   session.roles = ["fellow"];
   await session.save();
 
-  redirect("/learn");
+  redirect("/dashboard");
 }

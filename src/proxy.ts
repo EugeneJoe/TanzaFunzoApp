@@ -10,7 +10,7 @@ import { sessionOptions, type SessionData } from "@/lib/session";
 // else would catch it.
 
 const ADMIN_PREFIX = "/admin";
-const AUTHENTICATED_PREFIXES = ["/learn", "/me", ADMIN_PREFIX];
+const AUTHENTICATED_PREFIXES = ["/dashboard", "/learn", "/me", ADMIN_PREFIX];
 
 async function readSession(request: NextRequest): Promise<SessionData | null> {
   const cookie = request.cookies.get(sessionOptions.cookieName)?.value;

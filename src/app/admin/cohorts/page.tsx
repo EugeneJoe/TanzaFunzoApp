@@ -2,6 +2,7 @@ import { db } from "@/db";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { AddCohortForm } from "./add-cohort-form";
 import { ReassignControl } from "./reassign-control";
 
 export default async function AdminCohortsPage() {
@@ -30,6 +31,7 @@ export default async function AdminCohortsPage() {
   return (
     <div className="mx-auto flex w-full max-w-[1280px] flex-col gap-6 px-8 py-10 sm:px-12">
       <h1 className="font-heading text-[32px] font-semibold text-navy-900">Cohorts</h1>
+      <AddCohortForm />
       {cohortsList.map((cohort) => {
         const members = (membersByCohort.get(cohort.id) ?? []).sort((a, b) =>
           a.user.fullName.localeCompare(b.user.fullName)

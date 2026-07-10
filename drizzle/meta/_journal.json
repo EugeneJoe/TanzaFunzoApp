@@ -29,6 +29,13 @@
       "when": 1783516939556,
       "tag": "0003_qna_cascade_delete",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1783668243751,
+      "tag": "0004_add_class_views",
+      "breakpoints": true
     }
   ]
 }

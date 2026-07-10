@@ -5,6 +5,7 @@ import { classes } from "@/db/schema";
 import { requireUser } from "@/lib/auth";
 import { getCurrentEnrollment } from "@/lib/enrollment";
 import { getFellowJourney, isReleased } from "@/lib/journey";
+import { getCompletedClassIds, recordClassView } from "@/lib/completion";
 import { Separator } from "@/components/ui/separator";
 import { Overline } from "@/components/ui/overline";
 import { BlockRenderer } from "@/components/blocks/block-renderer";
@@ -34,8 +35,13 @@ export default async function FellowClassPage({ params }: { params: Promise<{ cl
   const ordinal = sameModule.findIndex((e) => e.class.id === classId) + 1;
   const nextEntry = journey[currentIndex + 1];
 
-  const releasedCount = journey.filter(isReleased).length;
-  const progressPct = journey.length > 0 ? Math.round((releasedCount / journey.length) * 100) : 0;
+  await recordClassView(session.userId, classId);
+
+  // Scoped to this module, not the whole cohort curriculum — a fellow
+  // reading "Class 1 of 1" should see progress through that module, not a
+  // number diluted by other modules elsewhere in their journey.
+  const completedIds = await getCompletedClassIds(session.userId, sameModule);
+  const progressPct = sameModule.length > 0 ? Math.round((completedIds.size / sameModule.length) * 100) : 0;
 
   const blocks = [...cls.page.publishedVersion.blocks].sort((a, b) => a.position - b.position);
 

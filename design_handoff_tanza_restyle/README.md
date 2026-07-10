@@ -17,8 +17,20 @@ admin sidebar shell (parallel to the learner sidebar, with Curriculum / Cohorts 
 Grading nav). The admin "Cohort overview" screen (`3A`) was then reworked again into
 full-width stacked sections so it scales cleanly as data grows. A login screen was
 also designed in three layout variants; **the "Split hero" variant (`4B`) is the
-selected direction** to build. Screens `2C` (updated), `3A` (updated), `3B`/`3C`
-(new), and `4B` (new, selected) are called out inline below.
+selected direction** to build.
+
+**Update (7/10/2026):** added a **Dashboard** nav item, first in both the learner and
+admin sidebars, so it's always clear when the user is on the dashboard page. This
+split the old combined `2C` ("My coursework — Your development") screen in two: `2C`
+is now **Dashboard** (the aptitude/development content, nav highlights "Dashboard"),
+and the submissions list moved to a new `2E` **My coursework** screen (nav highlights
+"My coursework"). Also added a cohort-creation input + button to the top of admin
+**Cohorts** (`3B`), and a "Forgot password?" link to the **Split hero** login (`4B`), and a
+new admin **Curriculum** screen (`3D`) recreated from a screenshot of the live app —
+modules with reorderable classes, per-cohort release toggles, and inline
+add-module/add-class rows — filling in the nav item that previously had no screen.
+Screens `2C` (changed), `2E` (new), `3B` (changed), `3D` (new), and `4B` (changed) are
+called out inline below.
 
 ## About the Design Files
 The file in this bundle (`Tanza Fellowship Hub — Combined.dc.html`) is a **design
@@ -89,8 +101,10 @@ Add these to `tailwind.config` (or map to existing CSS variables / shadcn theme 
 
 **Sidebar** (`#132239`, 244px, full height, faint triangle watermark):
 1. Wordmark — "TANZA / FELLOWSHIP" (FELLOWSHIP in orange), Jost 600, uppercase, tracked.
-2. Primary nav: **My journey**, **My coursework**. Active item = white text on
-   `rgba(222,90,28,.16)` with a 3px `#DE5A1C` left border + orange bullet.
+2. Primary nav (updated 7/10/2026, **Dashboard** added first): **Dashboard**,
+   **My journey**, **My coursework**. Active item = white text on
+   `rgba(222,90,28,.16)` with a 3px `#DE5A1C` left border + orange bullet — makes it
+   unambiguous which page (including Dashboard) is current.
 3. (Class + Results only) Divider, then a **QA Test Module** overline and the class list
    (numbered circle badge + class name; current class highlighted orange).
 4. Footer pinned bottom: orange avatar circle (initials "EM"), "Eugene Muthui", "Log out".
@@ -104,8 +118,11 @@ default, or use `shadcn/ui sidebar` block if installed). Nav items = styled `<Li
 **Admin sidebar** (new, screens `3A`–`3C`): same shell, treatment, and 244px width as
 the learner sidebar, but a separate layout/route group:
 1. Wordmark, plus an "ADMIN" overline (`Jost`, 11px, tracked, `#7C8DA6`) underneath.
-2. Primary nav: **Curriculum**, **Cohorts**, **Grading** — same active/idle styling as
-   the learner nav (no module/progress section under it).
+2. Primary nav (updated 7/10/2026, **Dashboard** added first): **Dashboard**,
+   **Curriculum**, **Cohorts**, **Grading** — same active/idle styling as the learner
+   nav (no module/progress section under it). No admin dashboard screen exists in this
+   catalog yet — the item is present for consistency/wayfinding; wire it up once that
+   screen is designed.
 3. Footer pinned bottom: just a "Log out" link (no avatar — no admin identity is shown
    in the source screens).
 
@@ -153,15 +170,15 @@ different `items` prop (and no user-footer avatar).
     "Continue" `Button` at right.
   - → `Card`, `Badge`, `Button`.
 
-### 3. My coursework — "Your development" (id `2C`, **updated 7/9/2026**)
-- **Purpose:** Reworked from a flat submissions list into a full development dashboard:
-  aptitude standing, cohort-relative position, qualitative strengths/gaps, module
-  progress, then the original coursework list below.
+### 3. Dashboard (id `2C`, **changed 7/10/2026** — was "My coursework — Your development")
+- **Purpose:** Split out of the old combined `2C` screen so "Dashboard" is its own nav
+  destination: aptitude standing, cohort-relative position, qualitative strengths/gaps,
+  module progress. The submissions list that used to sit below this content now lives
+  on its own **My coursework** screen (`2E`).
 - **Layout:** H1 "Your development", meta line "Cohort 1 · QA Test Module — updated
-  7/9/2026". Then, top to bottom: 3-up scorecard row, "You and the cohort" panel,
-  2-up Strengths/Focus next row, a module progress bar + caption, then H2 "Your
-  coursework" and the submission list (unchanged pattern from before, plus a
-  "Graded" badge).
+  7/9/2026". Top to bottom: 3-up scorecard row, "You and the cohort" panel, 2-up
+  Strengths/Focus next row, then a module progress bar + caption. Nav highlights
+  **Dashboard**.
 - **Components:**
   - **Aptitude scorecard** (×3 — Leadership, Strategic, Technical): white `Card`,
     `border`, radius 10px. Faint label (13px `text-faint`), big number (Jost 600
@@ -181,13 +198,18 @@ different `items` prop (and no user-footer avatar).
   - **Module progress:** full-width 8px orange (`#DE5A1C`) rounded bar (reflects e.g.
     2 of 2 classes = 100%), caption below "2 of 2 classes · 1 assessment pending"
     (`text-muted`).
-  - **Submission row (updated):** same white `Card` pattern as before, but the status
-    badge is now a solid navy "Graded" pill (not an outline "Submitted" one), and the
-    points value ("28/30 pts", Jost 600 15px) reads in plain navy rather than
-    error/success color — grading outcome is no longer binary pass/fail. "View" button
-    unchanged → routes to Results.
 
-### 4. Assessment results (id `2D`)
+### 4. My coursework (id `2E`, **new 7/10/2026**)
+- **Purpose:** The submissions list, split out of the old combined `2C` screen so it
+  has its own nav destination separate from Dashboard.
+- **Layout:** H1 "Your coursework", then the submission list.
+- **Components:**
+  - **Submission row:** white `Card`, `border`, radius 10px. Status badge is a solid
+    navy "Graded" pill, points value ("28/30 pts", Jost 600 15px) in plain navy —
+    grading outcome is no longer binary pass/fail. "View" button → routes to Results.
+    Nav highlights **My coursework**.
+
+### 5. Assessment results (id `2D`)
 - **Purpose:** Review a submitted attempt question-by-question.
 - **Layout:** overline "QA Test Module · QA Test Class"; header row = H1 "Untitled
   assessment" + outline "← Back to class" button. Then summary strip and question cards.
@@ -206,9 +228,9 @@ different `items` prop (and no user-footer avatar).
     - footer "0/20 points" (Jost 600, `text-muted`).
   - → `Card`, `Badge` (warning/success/error variants), option rows as styled divs.
 
-### 5. Admin — Cohort overview (id `3A`, **updated 7/9/2026**)
+### 6. Admin — Cohort overview (id `3A`, **updated 7/9/2026**)
 - **Purpose:** At-a-glance health snapshot for one cohort.
-- **Layout:** Admin sidebar (Cohorts active) + main, reworked into full-width stacked
+- **Layout:** Admin sidebar (**Dashboard active, changed 7/10/2026** — was Cohorts) + main, reworked into full-width stacked
   sections (not a 2-column split) so Attention and Capability gaps each scale
   independently as more fellows/skills are added — no truncated labels, no lopsided
   whitespace. H1 "Cohort 1", meta "7 fellows". 4-up stat card row, then full-width
@@ -228,11 +250,19 @@ different `items` prop (and no user-footer avatar).
     `#DE5A1C` normally, error red `#C44A2E` when the score is low/at-risk, e.g. below
     ~50) + right-aligned value.
 
-### 6. Admin — Cohorts (id `3B`, **new**)
-- **Purpose:** Roster management across cohorts; reassign fellows between cohorts.
+### 7. Admin — Cohorts (id `3B`, **new**; **updated 7/10/2026**)
+- **Purpose:** Roster management across cohorts; reassign fellows between cohorts;
+  create new cohorts.
 - **Layout:** Admin sidebar (Cohorts active) + main, wider content (no max-width cap,
-  frame widened to 1280px to fit the table). H1 "Cohorts", then one card per cohort.
+  frame widened to 1280px to fit the table). H1 "Cohorts", then an **"Add a cohort"
+  form card (updated 7/10/2026)**, then one card per cohort.
 - **Components:**
+  - **Add-cohort form card:** white `Card`. A 5-column field grid — **Cohort name**
+    (text `Input`), **Start date**, **Enrolment opens**, **Enrolment closes** (`Input
+    type="date"`), and **Status** (`Select`: Active / Upcoming / Archived) — each with
+    a Jost 600 12px label above. Primary orange "+ Add cohort" `Button`,
+    right-aligned below the grid. Wire to a create-cohort action; validate dates
+    (opens ≤ closes ≤ start) and disable submit until the name is non-empty.
   - **Cohort card:** white `Card`. Header: cohort name (Jost 600 19px) + neutral
     "active" pill (`#EEF1F4` bg, `text-muted`). Meta line below: start date,
     enrolment window, fellow count (`text-faint`).
@@ -244,7 +274,7 @@ different `items` prop (and no user-footer avatar).
     chosen). → `Table`/`Select`/`Button` (disabled state — faint border/text, `#F7F8FA`
     bg).
 
-### 7. Admin — Grading queue (id `3C`, **new**)
+### 8. Admin — Grading queue (id `3C`, **new**)
 - **Purpose:** Work queue of ungraded assessment responses across the cohort.
 - **Layout:** Admin sidebar (Grading active) + main, 1280px frame. H1 "Grading
   queue", subtitle "N responses awaiting grading", then one table `Card`.
@@ -259,7 +289,7 @@ different `items` prop (and no user-footer avatar).
 
 ---
 
-### 8. Log in (id `4B`, "Split hero", **selected direction**)
+### 9. Log in (id `4B`, "Split hero", **selected direction**; **updated 7/10/2026**)
 - **Purpose:** Authenticate before entering the learner/admin app.
 - **Layout:** No sidebar (pre-auth). Full-height two-pane split: a navy brand panel
   on the left (46% width) doubles as the "banner" seen on other login layouts explored;
@@ -273,27 +303,58 @@ different `items` prop (and no user-footer avatar).
     development for Tanzania's changemakers.", 14px, `#9FB0C8`).
   - **Form pane:** white background, 360px form column. H1 "Log in" (Jost 600 26px
     navy). `Email` and `Password` fields — Jost 600 13px navy label, white input,
-    `border-input` `#D6DBE3`, radius 8px, 12px/15px padding. Full-width primary
-    orange `Button` "Log in". Footer line "Need an account? Sign up" (Sign up = orange
-    link).
+    `border-input` `#D6DBE3`, radius 8px, 12px/15px padding. **Password label row
+    (new)** puts a "Forgot password?" link (orange, Jost 600 12.5px) right-aligned
+    against the "Password" label — wire to a real reset-password flow. Full-width
+    primary orange `Button` "Log in". Footer line "Need an account? Sign up" (Sign up
+    = orange link).
   - → `Card`-less layout (just a flex split); `Input`, `Button` (primary), `Label`.
 - **Note:** two other login layouts (`4A` top banner, `4C` banner card) were explored
   in the same combined file for reference, but **4B is the one to build** — the others
   can be treated as rejected options.
 
+### 9. Admin — Curriculum (id `3D`, **new 7/10/2026**, recreated from live app)
+- **Purpose:** Manage the module/class tree and control which cohorts each class is
+  released to. Fills in the "Curriculum" nav item, which previously had no screen.
+- **Layout:** Admin sidebar (Curriculum active) + main, 1280px frame. Header row: H1
+  "Curriculum" + right-aligned "New module title" `Input` and "Add module" `Button`.
+  Then one card per module (Government Engagement, QA Test Module, Sandbox / manual
+  testing), each listing its classes.
+- **Components:**
+  - **Module card:** white `Card`. Header row = module name (Jost 600 18px navy) +
+    reorder/archive icon cluster at right (↑ / ↓ / archive), muted `#8A97AC`.
+  - **Class row:** title (14.5px/600 navy) left; right side holds one **cohort release
+    control** per cohort ("Cohort 1", "Cohort 2 (test)"), each a label + toggle switch
+    + status pill ("Released" = solid orange pill, toggle on; "Locked" = outline pill,
+    toggle off) — then the same ↑ / ↓ / archive icon cluster as the module header.
+    → `Switch` + `Badge` (solid/outline) + icon buttons.
+  - **Add-class row:** `Input` ("New class title", max-width 320px) + outline `Button`
+    ("Add class"), pinned under each module's class list.
+- **Note:** reorder (↑/↓) and archive actions are visual only in this reference —
+  wire to real move/archive endpoints. "Add module"/"Add class" should validate
+  non-empty input before enabling, matching the Cohorts add-row pattern.
+
 ## Interactions & Behavior
-- **Nav:** sidebar items route between the four screens; active state per current route.
+- **Nav:** sidebar items route between Dashboard, My journey, Class, My coursework, and
+  Results; active state per current route (**Dashboard, added 7/10/2026, is first in
+  the list** so it's always clear when the user is on the dashboard).
 - **Continue** (My journey) → Class view. **Start assessment** (Class) → assessment
-  flow. **View** (Coursework) → Results. **Back to class** (Results) → Class view.
+  flow. **View** (My coursework) → Results. **Back to class** (Results) → Class view.
 - **Post question:** appends to the questions list; empty state "No questions yet."
 - **Progress rail:** reflects real class/module completion %.
 - **Hover:** buttons darken (orange → `#B8460F`; navy → slightly lighter); outline buttons
   fill faint navy tint; links → `#B8460F`. Cards may lift subtly (optional).
 - **Locked** classes are non-interactive/disabled.
-- **Admin nav:** sidebar items route between Cohort overview, Cohorts, and Grading
-  (Curriculum has no screen yet — nav item only). **Reassign** (Cohorts) is disabled
-  until a target cohort is chosen in the "Move to" select. **Grade** (Grading queue)
-  opens the grading view for that attempt (not designed yet).
+- **Admin nav:** sidebar items route between Dashboard (placeholder, not designed yet),
+  Curriculum, Cohort overview, Cohorts, and Grading. **+ Add module** / **+ Add
+  class** (Curriculum) create new entries from the adjacent input — disable until
+  non-empty. Toggling a cohort's release switch (Curriculum) flips it between
+  "Released"/"Locked" for that cohort. **+ Add cohort** (Cohorts) creates a new cohort
+  from the name input — disable until non-empty, then clear + prepend the new cohort
+  card on success. **Reassign** (Cohorts) is disabled until a target cohort is chosen
+  in the "Move to" select. **Grade** (Grading queue) opens the grading view for that
+  attempt (not designed yet).
+- **Forgot password?** (Log in) → real password-reset flow (not designed yet).
 
 ## State Management
 - Current route → active nav + which sidebar module section shows.
@@ -314,15 +375,18 @@ different `items` prop (and no user-footer avatar).
 
 ## Files
 - `Tanza Fellowship Hub — Combined.dc.html` — the hifi design reference (all screens,
-  tagged `2A`/`2B`/`2C`/`2D` for learner, `3A`/`3B`/`3C` for admin, and `4A`/`4B`/`4C`
-  for the login exploration — build `4B` only). Open in a browser to inspect exact
-  styles/measurements.
+  tagged `2A`/`2B`/`2C`/`2D`/`2E` for learner, `3A`/`3B`/`3C`/`3D` for admin, and
+  `4A`/`4B`/`4C` for the login exploration — build `4B` only). Open in a browser to
+  inspect exact styles/measurements.
 - `screenshots/` — rendered previews of each screen:
   - `2A-class-view.png`
   - `2B-my-journey.png`
-  - `2C-your-development.png` (updated 7/9/2026 — was `2C-my-coursework.png`)
+  - `2C-dashboard.png` (was "Your development"/`2C-your-development.png` — split
+    7/10/2026, coursework list moved to `2E`)
+  - `2E-my-coursework.png` (new 7/10/2026)
   - `2D-results.png`
   - `3A-admin-cohort-overview.png` (updated 7/9/2026 — full-width stacked layout)
   - `3B-admin-cohorts.png`
   - `3C-admin-grading-queue.png`
+  - `3D-admin-curriculum.png` (new 7/10/2026)
   - `4B-login-split-hero.png` (new — selected login direction)

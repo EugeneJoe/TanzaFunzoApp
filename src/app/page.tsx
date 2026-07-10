@@ -6,5 +6,5 @@ export default async function Home() {
   if (!session.userId) {
     redirect("/login");
   }
-  redirect(session.roles.includes("admin") ? "/admin" : "/learn");
+  redirect(session.roles.includes("admin") ? "/admin" : "/dashboard");
 }

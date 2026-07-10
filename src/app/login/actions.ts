@@ -50,5 +50,5 @@ export async function loginAction(_prevState: LoginState, formData: FormData): P
   await session.save();
 
   const next = safeNextPath(formData.get("next"));
-  redirect(next ?? (roleNames.includes("admin") ? "/admin" : "/learn"));
+  redirect(next ?? (roleNames.includes("admin") ? "/admin" : "/dashboard"));
 }
